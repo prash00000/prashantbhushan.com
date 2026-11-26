@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE } from '../../config/site';
+import {
+  collectTags,
+  getPublishedArticles,
+  getSortedCreatorItems,
+  getSortedProjects,
+} from '../../utils/content';
+
+const [articles, projects, creator] = await Promise.all([
+  getPublishedArticles(),
+  getSortedProjects(),
+  getSortedCreatorItems(),
+]);
+
+const tags = collectTags(articles, projects, creator);
+---
+
+<BaseLayout
+  title={`Tags | ${SITE.name}`}
+  description={`Browse all topic tags across articles, projects, and content by ${SITE.name}`}
+>
+  <section class="space-y-6">
+    <div class="space-y-2">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-fg">Tags</h1>
+      <p class="text-sm sm:text-base text-fg-muted">
+        Explore articles, projects, and content grouped by topic.
+      </p>
+    </div>
+
+    <ul class="flex flex-wrap gap-3">
+      {tags.map((tag) => (
+        <li>
+          <a
+            href={`/tags/${tag.slug}`}
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface text-sm font-mono text-fg hover:border-accent hover:text-accent transition-colors"
+          >
+            <span class="text-accent">#</span>
+            <span>{tag.label}</span>
+            <span class="text-xs text-fg-muted">({tag.count})</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>

@@ -1,0 +1,260 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NewsletterBox from '../../components/NewsletterBox.astro';
+import ReadingProgress from '../../components/ReadingProgress.astro';
+import SocialIcons from '../../components/SocialIcons.astro';
+import { CATEGORIES, SITE } from '../../config/site';
+import {
+  type ArticleEntry,
+  formatDate,
+  getPublishedArticles,
+  getReadingTime,
+  slugifyTag,
+} from '../../utils/content';
+
+interface Props {
+  article: ArticleEntry;
+  prevArticle: ArticleEntry | null;
+  nextArticle: ArticleEntry | null;
+}
+
+export async function getStaticPaths() {
+  const articles = await getPublishedArticles();
+  return articles.map((article, index) => ({
+    params: { slug: article.id },
+    props: {
+      article,
+      nextArticle: index > 0 ? articles[index - 1] : null,
+      prevArticle: index < articles.length - 1 ? articles[index + 1] : null,
+    },
+  }));
+}
+
+const { article, prevArticle, nextArticle } = Astro.props;
+const { Content, headings } = await render(article);
+const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+const readingTime = getReadingTime(article.body);
+const categoryMeta = CATEGORIES[article.data.category];
+const articleUrl = new URL(`/articles/${article.id}`, Astro.site ?? SITE.siteUrl).toString();
+const shareText = encodeURIComponent(`${article.data.title} by ${SITE.handle}`);
+const encodedUrl = encodeURIComponent(articleUrl);
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: article.data.title,
+  description: article.data.description,
+  datePublished: article.data.pubDate.toISOString(),
+  ...(article.data.updatedDate && { dateModified: article.data.updatedDate.toISOString() }),
+  author: {
+    '@type': 'Person',
+    name: SITE.name,
+    url: (Astro.site ?? new URL(SITE.siteUrl)).toString(),
+  },
+  mainEntityOfPage: articleUrl,
+  keywords: article.data.tags.join(', '),
+};
+---
+
+<BaseLayout
+  title={`${article.data.title} | ${SITE.name}`}
+  description={article.data.description}
+  ogType="article"
+  pubDate={article.data.pubDate}
+  updatedDate={article.data.updatedDate}
+  structuredData={articleSchema}
+>
+  <ReadingProgress />
+
+  <article class="space-y-6">
+    <div>
+      <a
+        href="/articles"
+        class="inline-flex items-center gap-1.5 text-xs font-mono text-fg-muted hover:text-accent link-dashed mb-5"
+      >
+        <SocialIcons name="ArrowLeft" class="w-3.5 h-3.5" />
+        <span>Back to Articles</span>
+      </a>
+
+      <h1
+        transition:name={`article-title-${article.id}`}
+        class="text-2xl sm:text-3xl font-bold tracking-tight text-accent leading-tight"
+      >
+        {article.data.title}
+      </h1>
+
+      <div class="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-fg-muted">
+        <div class="flex flex-wrap items-center gap-2.5">
+          <span class="inline-flex items-center gap-1.5 italic">
+            <SocialIcons name="Calendar" class="w-3.5 h-3.5" />
+            <time datetime={article.data.pubDate.toISOString()}>
+              {formatDate(article.data.pubDate, 'long')}
+            </time>
+          </span>
+          {article.data.updatedDate && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span class="italic">
+                Updated{' '}
+                <time datetime={article.data.updatedDate.toISOString()}>
+                  {formatDate(article.data.updatedDate, 'short')}
+                </time>
+              </span>
+            </>
+          )}
+          <span aria-hidden="true">·</span>
+          <span>{readingTime}</span>
+          <span aria-hidden="true">·</span>
+          <span class="px-2 py-0.5 rounded bg-surface-muted border border-border text-fg">
+            {categoryMeta.label}
+          </span>
+        </div>
+
+        <a
+          href={`/articles/${article.id}.md`}
+          class="inline-flex items-center gap-1 text-fg-muted hover:text-accent link-dashed"
+        >
+          <SocialIcons name="FileText" class="w-3.5 h-3.5" />
+          <span>View .md</span>
+        </a>
+      </div>
+    </div>
+
+    {article.data.heroImage && (
+      <figure class="overflow-hidden rounded-xl border border-border">
+        <img
+          src={article.data.heroImage}
+          alt={article.data.heroAlt ?? article.data.title}
+          loading="lazy"
+          decoding="async"
+          class="w-full h-auto object-cover"
+        />
+      </figure>
+    )}
+
+    {tocHeadings.length >= 3 && (
+      <details
+        open
+        class="rounded-xl border border-border bg-surface-muted/40 px-4 py-3 text-sm"
+      >
+        <summary class="cursor-pointer font-mono text-xs uppercase tracking-wider text-fg-muted font-semibold select-none hover:text-accent transition-colors">
+          Table of Contents
+        </summary>
+        <nav aria-label="Table of Contents" class="mt-2.5">
+          <ul class="space-y-1.5 text-xs sm:text-sm">
+            {tocHeadings.map((heading) => (
+              <li class={heading.depth === 3 ? 'pl-4' : undefined}>
+                <a
+                  href={`#${heading.slug}`}
+                  class="text-fg-muted hover:text-accent link-dashed"
+                >
+                  {heading.text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </details>
+    )}
+
+    <div class="prose max-w-none pt-2">
+      <Content />
+    </div>
+
+    <NewsletterBox compact />
+
+    {article.data.tags.length > 0 && (
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-2 pt-2">
+        <span class="text-xs font-mono text-fg-muted">Tags:</span>
+        {article.data.tags.map((tag) => (
+          <a
+            href={`/tags/${slugifyTag(tag)}`}
+            class="inline-flex items-center gap-0.5 text-sm font-mono text-fg-muted hover:text-accent link-dashed"
+          >
+            <span>#</span>
+            <span>{tag}</span>
+          </a>
+        ))}
+      </div>
+    )}
+
+    <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-border">
+      <div class="flex flex-wrap items-center gap-3 text-xs font-mono text-fg-muted">
+        <span>Share:</span>
+        <a
+          href={`https://x.com/intent/tweet?text=${shareText}&url=${encodedUrl}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Share on X"
+          class="hover:text-accent transition-colors"
+        >
+          <SocialIcons name="X" class="w-4 h-4" />
+        </a>
+        <a
+          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Share on LinkedIn"
+          class="hover:text-accent transition-colors"
+        >
+          <SocialIcons name="LinkedIn" class="w-4 h-4" />
+        </a>
+        <a
+          href={`mailto:?subject=${encodeURIComponent(article.data.title)}&body=${encodedUrl}`}
+          aria-label="Share via Email"
+          class="hover:text-accent transition-colors"
+        >
+          <SocialIcons name="Email" class="w-4 h-4" />
+        </a>
+      </div>
+
+      <button
+        id="back-to-top-btn"
+        type="button"
+        class="inline-flex items-center gap-1.5 text-xs font-mono text-fg-muted hover:text-accent cursor-pointer transition-colors"
+      >
+        <SocialIcons name="ArrowUp" class="w-3.5 h-3.5" />
+        <span>Back to Top</span>
+      </button>
+    </div>
+
+    {(prevArticle || nextArticle) && (
+      <nav
+        aria-label="Article navigation"
+        class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t border-dashed border-border"
+      >
+        {prevArticle ? (
+          <a
+            href={`/articles/${prevArticle.id}`}
+            class="group flex items-start gap-2.5 rounded-xl border border-border bg-surface p-4 hover:border-accent/60 transition-colors"
+          >
+            <SocialIcons name="ArrowLeft" class="w-4 h-4 mt-1 shrink-0 text-fg-muted group-hover:text-accent" />
+            <div class="space-y-0.5">
+              <span class="block text-xs font-mono text-fg-muted">Previous Article</span>
+              <span class="block text-sm font-medium text-accent group-hover:underline decoration-dashed underline-offset-4">
+                {prevArticle.data.title}
+              </span>
+            </div>
+          </a>
+        ) : (
+          <div />
+        )}
+
+        {nextArticle && (
+          <a
+            href={`/articles/${nextArticle.id}`}
+            class="group flex items-start justify-end gap-2.5 text-right rounded-xl border border-border bg-surface p-4 hover:border-accent/60 transition-colors"
+          >
+            <div class="space-y-0.5">
+              <span class="block text-xs font-mono text-fg-muted">Next Article</span>
+              <span class="block text-sm font-medium text-accent group-hover:underline decoration-dashed underline-offset-4">
+                {nextArticle.data.title}
+              </span>
+            </div>
+            <SocialIcons name="ArrowRight" class="w-4 h-4 mt-1 shrink-0 text-fg-muted group-hover:text-accent" />
+          </a>
+        )}
+      </nav>
+    )}
+  </article>
+</BaseLayout>

@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SocialIcons from '../../components/SocialIcons.astro';
+import { SITE } from '../../config/site';
+---
+
+<BaseLayout
+  title={`Practice | ${SITE.name}`}
+  description={`Legal practice and legal-tech advisory by ${SITE.name}`}
+>
+  <section class="space-y-8">
+    <div class="space-y-3">
+      <div class="flex flex-wrap items-baseline justify-between gap-3">
+        <span class="text-xs font-mono uppercase tracking-wider text-accent font-semibold">
+          Legal Practice & Advisory
+        </span>
+        <a
+          href="/practice.md"
+          class="inline-flex items-center gap-1.5 text-xs font-mono text-fg-muted hover:text-accent link-dashed"
+        >
+          <SocialIcons name="FileText" class="w-3.5 h-3.5" />
+          <span>practice.md</span>
+        </a>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-fg">
+        {SITE.practice.headline}
+      </h1>
+      <p class="text-base text-fg-muted leading-relaxed">
+        {SITE.practice.intro}
+      </p>
+    </div>
+
+    <aside class="rounded-xl border border-border bg-surface-muted/60 p-4 text-xs font-mono text-fg-muted leading-relaxed">
+      {SITE.practice.disclaimer}
+    </aside>
+
+    <div class="space-y-4">
+      <h2 class="text-xl font-bold tracking-tight text-fg">Core Advisory Areas</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {SITE.practice.areas.map((area) => (
+          <article class="rounded-xl border border-border bg-surface p-5 space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-accent-soft text-accent font-medium">
+                {area.tag}
+              </span>
+            </div>
+            <h3 class="text-base font-bold text-fg">{area.title}</h3>
+            <p class="text-sm text-fg-muted leading-relaxed">{area.summary}</p>
+            <ul class="space-y-1.5 pt-2 border-t border-border/70 text-xs text-fg-muted">
+              {area.deliverables.map((item) => (
+                <li class="flex items-start gap-2">
+                  <span class="font-mono text-accent">·</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <hr class="border-border" />
+
+    <div class="space-y-4">
+      <h2 class="text-xl font-bold tracking-tight text-fg">How We Can Work Together</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {SITE.practice.engagements.map((eng) => (
+          <div class="rounded-xl border border-border bg-surface p-4 space-y-2">
+            <p class="text-[11px] font-mono text-accent font-medium">{eng.cadence}</p>
+            <h3 class="text-sm font-bold text-fg">{eng.title}</h3>
+            <p class="text-xs text-fg-muted leading-relaxed">{eng.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <section class="rounded-xl border border-border bg-surface p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="space-y-1">
+        <h2 class="text-lg font-bold text-fg">Need legal perspective on a build or deal?</h2>
+        <p class="text-sm text-fg-muted">
+          Send a brief overview of your product, timeline, or speaking invitation.
+        </p>
+      </div>
+      <a
+        href={SITE.practice.contactEmail}
+        class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-accent text-accent-fg text-sm font-semibold hover:opacity-90 transition-opacity shrink-0"
+      >
+        <SocialIcons name="Email" class="w-4 h-4" />
+        <span>Get in Touch</span>
+      </a>
+    </section>
+  </section>
+</BaseLayout>

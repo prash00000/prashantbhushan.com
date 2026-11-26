@@ -1,0 +1,51 @@
+---
+import { type CreatorEntry, formatDate } from '../utils/content';
+import SocialIcons from './SocialIcons.astro';
+
+interface Props {
+  item: CreatorEntry;
+}
+
+const { item } = Astro.props;
+
+const platformLabels: Record<CreatorEntry['data']['platform'], string> = {
+  youtube: 'YouTube',
+  podcast: 'Podcast',
+  thread: 'X Thread',
+  talk: 'Talk',
+};
+---
+
+<article
+  class="group rounded-xl border border-border bg-surface p-4 sm:p-5 transition-all hover:border-accent/60"
+  data-content-card
+  data-platform={item.data.platform}
+>
+  <div class="flex flex-wrap items-center justify-between gap-2 mb-2 text-xs font-mono text-fg-muted">
+    <div class="flex items-center gap-2">
+      <span class="px-2 py-0.5 rounded-md bg-accent-soft text-accent font-medium border border-border/60">
+        {platformLabels[item.data.platform]}
+      </span>
+      {item.data.durationOrFormat && <span>{item.data.durationOrFormat}</span>}
+    </div>
+    <time datetime={item.data.pubDate.toISOString()} class="italic">
+      {formatDate(item.data.pubDate)}
+    </time>
+  </div>
+
+  <h3 class="text-base font-semibold text-fg leading-snug">
+    <a
+      href={item.data.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-start gap-1.5 hover:text-accent hover:underline decoration-dashed underline-offset-4 transition-colors"
+    >
+      <span>{item.data.title}</span>
+      <SocialIcons name="ArrowUpRight" class="w-4 h-4 shrink-0 mt-0.5 opacity-75" />
+    </a>
+  </h3>
+
+  <p class="mt-1.5 text-sm text-fg-muted leading-relaxed">
+    {item.data.description}
+  </p>
+</article>

@@ -1,0 +1,92 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { SITE } from '../config/site';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogType?: 'website' | 'article';
+  pubDate?: Date;
+  updatedDate?: Date;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title = SITE.title,
+  description = SITE.description,
+  ogType = 'website',
+  pubDate,
+  updatedDate,
+  structuredData,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? SITE.siteUrl);
+const ogImageURL = new URL('/og-image.png', Astro.site ?? SITE.siteUrl);
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" href="/favicon.ico" />
+
+<meta property="og:type" content={ogType} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:image" content={ogImageURL} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={title} />
+{pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
+{updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content={ogImageURL} />
+<meta name="twitter:creator" content={SITE.handle} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={`${SITE.name} RSS Feed`}
+  href={new URL('rss.xml', Astro.site ?? SITE.siteUrl)}
+/>
+<link rel="alternate" type="text/plain" title="LLMs Directory" href="/llms.txt" />
+
+{structuredData && (
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+)}
+
+<ClientRouter />
+
+<script is:inline>
+  (function () {
+    function resolveTheme() {
+      try {
+        var saved = localStorage.getItem('theme');
+        if (saved === 'light' || saved === 'dark') return saved;
+      } catch (e) {}
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function applyTheme(doc) {
+      var theme = resolveTheme();
+      doc.documentElement.setAttribute('data-theme', theme);
+    }
+
+    applyTheme(document);
+
+    document.addEventListener('astro:before-swap', function (ev) {
+      if (ev && ev.newDocument) applyTheme(ev.newDocument);
+    });
+  })();
+</script>

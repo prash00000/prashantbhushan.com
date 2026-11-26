@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <style>
+    .bg { fill: #fcfcfd; stroke: #e4e4e7; }
+    .fg { fill: #006cac; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #131824; stroke: #2b354b; }
+      .fg { fill: #ff7a1a; }
+    }
+  </style>
+  <rect class="bg" x="2" y="2" width="60" height="60" rx="14" stroke-width="3" />
+  <text
+    class="fg"
+    x="32"
+    y="41"
+    text-anchor="middle"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+    font-size="26"
+    font-weight="700"
+    letter-spacing="-1"
+  >PB</text>
+</svg>

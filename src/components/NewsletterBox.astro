@@ -1,0 +1,79 @@
+---
+import { SITE } from '../config/site';
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+const hasLiveAction = Boolean(SITE.newsletter.actionUrl);
+---
+
+<section
+  class:list={[
+    'rounded-xl border border-border bg-surface-muted/60',
+    compact ? 'p-5 my-6' : 'p-6 sm:p-7 my-10',
+  ]}
+  aria-label="Newsletter signup"
+>
+  <div class="space-y-2 mb-4">
+    <p class="text-xs font-mono uppercase tracking-wider text-accent font-semibold">
+      Newsletter
+    </p>
+    <h2 class="text-lg sm:text-xl font-bold text-fg">
+      {SITE.newsletter.heading}
+    </h2>
+    <p class="text-sm text-fg-muted leading-relaxed">
+      {SITE.newsletter.description}
+    </p>
+  </div>
+
+  <form
+    action={hasLiveAction ? SITE.newsletter.actionUrl : undefined}
+    method={hasLiveAction ? 'post' : undefined}
+    target={hasLiveAction ? '_blank' : undefined}
+    data-newsletter-form
+    data-live={hasLiveAction ? 'true' : 'false'}
+    class="flex flex-col sm:flex-row gap-2.5"
+  >
+    <label class="sr-only" for="newsletter-email">Email address</label>
+    <input
+      id="newsletter-email"
+      type="email"
+      name="email"
+      required
+      placeholder={SITE.newsletter.placeholderEmail}
+      class="flex-1 px-3.5 py-2.5 rounded-lg border border-border bg-surface text-sm text-fg placeholder:text-fg-muted/70 focus:outline-none focus:border-accent"
+    />
+    <button
+      type="submit"
+      class="px-5 py-2.5 rounded-lg bg-accent text-accent-fg text-sm font-semibold hover:opacity-90 transition-opacity cursor-pointer whitespace-nowrap"
+    >
+      Subscribe
+    </button>
+  </form>
+
+  <p data-newsletter-status class="hidden mt-3 text-xs font-mono text-accent"></p>
+</section>
+
+<script>
+  function initNewsletterForms() {
+    document.querySelectorAll<HTMLFormElement>('[data-newsletter-form]').forEach((form) => {
+      if (form.dataset.bound || form.dataset.live === 'true') return;
+      form.dataset.bound = 'true';
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const emailInput = form.querySelector<HTMLInputElement>('input[type="email"]');
+        const status = form.parentElement?.querySelector<HTMLElement>('[data-newsletter-status]');
+        if (!status) return;
+        const email = emailInput?.value.trim() || 'your inbox';
+        status.textContent = `Preview mode: "${email}" captured locally. Set SITE.newsletter.actionUrl in src/config/site.ts for live delivery.`;
+        status.classList.remove('hidden');
+        form.reset();
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initNewsletterForms);
+</script>

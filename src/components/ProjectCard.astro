@@ -1,0 +1,98 @@
+---
+import { type ProjectEntry } from '../utils/content';
+import SocialIcons from './SocialIcons.astro';
+
+interface Props {
+  project: ProjectEntry;
+}
+
+const { project } = Astro.props;
+
+const statusLabel: Record<ProjectEntry['data']['status'], string> = {
+  live: 'Live',
+  building: 'Building',
+  'open-source': 'Open Source',
+  archived: 'Archived',
+};
+
+const domainLabel: Record<ProjectEntry['data']['domain'], string> = {
+  'legal-tech': 'Legal-Tech',
+  'ai-tool': 'AI Tool',
+  'web-app': 'Web App',
+  cli: 'CLI',
+};
+---
+
+<article
+  class="group flex flex-col justify-between rounded-xl border border-border bg-surface p-5 transition-all hover:border-accent/60 hover:-translate-y-0.5"
+  data-project-card
+  data-domain={project.data.domain}
+>
+  <div>
+    <div class="flex items-center justify-between gap-2 mb-3">
+      <span class="text-[11px] font-mono uppercase tracking-wider text-fg-muted">
+        {domainLabel[project.data.domain]}
+      </span>
+      <span class="inline-flex items-center gap-1.5 text-[11px] font-mono px-2 py-0.5 rounded-full bg-surface-muted border border-border text-fg">
+        <span
+          class:list={[
+            'w-1.5 h-1.5 rounded-full',
+            project.data.status === 'live' && 'bg-emerald-500',
+            project.data.status === 'open-source' && 'bg-accent',
+            project.data.status === 'building' && 'bg-amber-500',
+            project.data.status === 'archived' && 'bg-fg-muted',
+          ]}
+          aria-hidden="true"
+        />
+        {statusLabel[project.data.status]}
+      </span>
+    </div>
+
+    <h3 class="text-base font-semibold text-fg group-hover:text-accent transition-colors">
+      <a href={`/projects/${project.id}`} class="hover:underline decoration-dashed underline-offset-4">
+        {project.data.title}
+      </a>
+    </h3>
+
+    <p class="mt-2 text-sm text-fg-muted leading-relaxed">
+      {project.data.description}
+    </p>
+  </div>
+
+  <div class="mt-4 pt-3 border-t border-border/70 flex items-center justify-between gap-3">
+    <div class="flex flex-wrap gap-1.5">
+      {project.data.stack.slice(0, 3).map((tech) => (
+        <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-surface-muted text-fg-muted">
+          {tech}
+        </span>
+      ))}
+    </div>
+
+    <div class="flex items-center gap-2.5 shrink-0">
+      {project.data.repoUrl && (
+        <a
+          href={project.data.repoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${project.data.title} source repository`}
+          title="GitHub Repository"
+          class="text-fg-muted hover:text-accent transition-colors"
+        >
+          <SocialIcons name="GitHub" class="w-4 h-4" />
+        </a>
+      )}
+      {project.data.liveUrl && (
+        <a
+          href={project.data.liveUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Open ${project.data.title}`}
+          title="Visit Project"
+          class="text-fg-muted hover:text-accent transition-colors"
+        >
+          <SocialIcons name="ArrowUpRight" class="w-4 h-4" />
+        </a>
+      )}
+    </div>
+  </div>
+</article>

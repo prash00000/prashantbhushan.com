@@ -1,0 +1,195 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SocialIcons from '../components/SocialIcons.astro';
+import { SITE } from '../config/site';
+---
+
+<BaseLayout
+  title={`Search | ${SITE.name}`}
+  description={`Search articles, projects, content, and tags on ${SITE.name}'s site`}
+>
+  <section class="space-y-6">
+    <div class="space-y-2">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-fg">Search</h1>
+      <p class="text-sm sm:text-base text-fg-muted">
+        Search across articles, vibe-coded projects, videos, threads, and legal practice areas.
+      </p>
+    </div>
+
+    <div class="space-y-3">
+      <div class="relative">
+        <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-fg-muted pointer-events-none">
+          <SocialIcons name="Search" class="w-4 h-4" />
+        </span>
+        <input
+          id="search-input"
+          type="search"
+          autocomplete="off"
+          placeholder="Search titles, topics, tags, or stack (e.g. law, cli, ai)..."
+          class="w-full pl-10 pr-4 py-3 rounded-xl border border-border bg-surface text-sm sm:text-base text-fg placeholder:text-fg-muted/70 focus:outline-none focus:border-accent"
+        />
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Filter search by type">
+        {[
+          { key: 'all', label: 'All' },
+          { key: 'article', label: 'Articles' },
+          { key: 'project', label: 'Projects' },
+          { key: 'content', label: 'Content' },
+          { key: 'page', label: 'Pages' },
+        ].map((kind, idx) => (
+          <button
+            type="button"
+            data-search-type={kind.key}
+            aria-pressed={idx === 0 ? 'true' : 'false'}
+            class:list={[
+              'px-3 py-1 rounded-lg border text-xs font-mono transition-colors cursor-pointer',
+              idx === 0
+                ? 'bg-accent text-accent-fg border-accent'
+                : 'bg-surface border-border text-fg-muted hover:border-accent hover:text-fg',
+            ]}
+          >
+            {kind.label}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <p id="search-status" class="text-xs font-mono text-fg-muted">
+      Loading index...
+    </p>
+
+    <ul id="search-results" class="divide-y divide-border/70"></ul>
+  </section>
+</BaseLayout>
+
+<script>
+  interface SearchItem {
+    title: string;
+    description: string;
+    url: string;
+    type: 'article' | 'project' | 'content' | 'page';
+    badge: string;
+    date?: string;
+    tags: string[];
+  }
+
+  function initSearchPage() {
+    const input = document.getElementById('search-input') as HTMLInputElement | null;
+    const resultsEl = document.getElementById('search-results');
+    const statusEl = document.getElementById('search-status');
+    const typeBtns = document.querySelectorAll<HTMLButtonElement>('[data-search-type]');
+    if (!input || !resultsEl || !statusEl) return;
+
+    let items: SearchItem[] = [];
+    let activeType = 'all';
+
+    const params = new URLSearchParams(window.location.search);
+    const initialQuery = params.get('q') ?? '';
+    if (initialQuery) input.value = initialQuery;
+    input.focus();
+
+    const render = () => {
+      const q = input.value.trim().toLowerCase();
+      const filtered = items.filter((item) => {
+        if (activeType !== 'all' && item.type !== activeType) return false;
+        if (!q) return true;
+        const haystack = `${item.title} ${item.description} ${item.badge} ${item.tags.join(' ')}`.toLowerCase();
+        return q.split(/\s+/).every((term) => haystack.includes(term));
+      });
+
+      statusEl.textContent = q
+        ? `${filtered.length} result${filtered.length === 1 ? '' : 's'} for "${input.value.trim()}"`
+        : `Showing ${filtered.length} indexed item${filtered.length === 1 ? '' : 's'}`;
+
+      resultsEl.innerHTML = '';
+
+      if (filtered.length === 0) {
+        const empty = document.createElement('li');
+        empty.className = 'py-8 text-sm font-mono text-fg-muted';
+        empty.textContent = 'No matching results found. Try a broader keyword or clear the type filter.';
+        resultsEl.appendChild(empty);
+        return;
+      }
+
+      for (const item of filtered) {
+        const li = document.createElement('li');
+        li.className = 'py-4';
+
+        const meta = document.createElement('div');
+        meta.className = 'flex flex-wrap items-center gap-2 text-xs font-mono text-fg-muted mb-1';
+
+        const badge = document.createElement('span');
+        badge.className = 'px-2 py-0.5 rounded bg-accent-soft text-accent font-medium';
+        badge.textContent = item.badge;
+        meta.appendChild(badge);
+
+        if (item.date) {
+          const dateSpan = document.createElement('span');
+          dateSpan.className = 'italic';
+          dateSpan.textContent = item.date;
+          meta.appendChild(dateSpan);
+        }
+
+        const link = document.createElement('a');
+        link.href = item.url;
+        link.className =
+          'text-base sm:text-lg font-semibold text-accent hover:underline decoration-dashed underline-offset-4';
+        if (item.url.startsWith('http')) {
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+        }
+        link.textContent = item.title;
+
+        const desc = document.createElement('p');
+        desc.className = 'text-sm text-fg-muted mt-1 leading-relaxed';
+        desc.textContent = item.description;
+
+        li.append(meta, link, desc);
+        resultsEl.appendChild(li);
+      }
+    };
+
+    fetch('/search-index.json')
+      .then((res) => res.json())
+      .then((data: SearchItem[]) => {
+        items = data;
+        render();
+      })
+      .catch(() => {
+        statusEl.textContent = 'Unable to load search index.';
+      });
+
+    if (!input.dataset.bound) {
+      input.dataset.bound = 'true';
+      input.addEventListener('input', () => {
+        const url = new URL(window.location.href);
+        if (input.value.trim()) {
+          url.searchParams.set('q', input.value.trim());
+        } else {
+          url.searchParams.delete('q');
+        }
+        window.history.replaceState({}, '', url.toString());
+        render();
+      });
+    }
+
+    typeBtns.forEach((btn) => {
+      if (btn.dataset.bound) return;
+      btn.dataset.bound = 'true';
+      btn.addEventListener('click', () => {
+        activeType = btn.dataset.searchType || 'all';
+        typeBtns.forEach((b) => {
+          const isSelected = b === btn;
+          b.setAttribute('aria-pressed', String(isSelected));
+          b.className = isSelected
+            ? 'px-3 py-1 rounded-lg border text-xs font-mono transition-colors cursor-pointer bg-accent text-accent-fg border-accent'
+            : 'px-3 py-1 rounded-lg border text-xs font-mono transition-colors cursor-pointer bg-surface border-border text-fg-muted hover:border-accent hover:text-fg';
+        });
+        render();
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initSearchPage);
+</script>

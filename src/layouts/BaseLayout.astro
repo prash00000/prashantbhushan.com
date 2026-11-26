@@ -1,0 +1,68 @@
+---
+import MainHead from '../components/MainHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogType?: 'website' | 'article';
+  pubDate?: Date;
+  updatedDate?: Date;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const { title, description, ogType, pubDate, updatedDate, structuredData } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <MainHead
+      title={title}
+      description={description}
+      ogType={ogType}
+      pubDate={pubDate}
+      updatedDate={updatedDate}
+      structuredData={structuredData}
+    />
+  </head>
+  <body class="bg-bg text-fg font-sans antialiased">
+    <Header />
+    <main id="main-content" transition:animate="fade" class="flex-1 w-full max-w-3xl mx-auto px-4 sm:px-6 pt-8">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      import { navigate } from 'astro:transitions/client';
+
+      function bindGlobalSearchShortcut() {
+        if (document.documentElement.dataset.searchShortcutBound) return;
+        document.documentElement.dataset.searchShortcutBound = 'true';
+
+        document.addEventListener('keydown', (e) => {
+          const target = e.target as HTMLElement | null;
+          const isTyping =
+            target &&
+            (target.tagName === 'INPUT' ||
+              target.tagName === 'TEXTAREA' ||
+              target.tagName === 'SELECT' ||
+              target.isContentEditable);
+
+          if ((e.key === 'k' && (e.metaKey || e.ctrlKey)) || (e.key === '/' && !isTyping)) {
+            e.preventDefault();
+            if (window.location.pathname !== '/search' && window.location.pathname !== '/search/') {
+              navigate('/search');
+            } else {
+              const input = document.getElementById('search-input') as HTMLInputElement | null;
+              input?.focus();
+            }
+          }
+        });
+      }
+
+      document.addEventListener('astro:page-load', bindGlobalSearchShortcut);
+    </script>
+  </body>
+</html>

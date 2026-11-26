@@ -1,0 +1,139 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleRow from '../../components/ArticleRow.astro';
+import SocialIcons from '../../components/SocialIcons.astro';
+import { CATEGORIES, SITE } from '../../config/site';
+import { getPublishedArticles, groupArticlesByYearMonth } from '../../utils/content';
+
+const articles = await getPublishedArticles();
+const yearGroups = groupArticlesByYearMonth(articles);
+
+const filterButtons = [
+  { key: 'all', label: `All (${articles.length})` },
+  ...Object.entries(CATEGORIES).map(([key, meta]) => {
+    const count = articles.filter((a) => a.data.category === key).length;
+    return { key, label: `${meta.label} (${count})` };
+  }),
+];
+---
+
+<BaseLayout
+  title={`Articles | ${SITE.name}`}
+  description={`Essays, legal-tech notes, and vibe-coding articles by ${SITE.name}`}
+>
+  <section class="space-y-6">
+    <div class="flex flex-wrap items-baseline justify-between gap-3">
+      <div class="space-y-1.5">
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-fg">Articles</h1>
+        <p class="text-sm sm:text-base text-fg-muted italic">
+          Browse all essays and notes by year, month, or topic.
+        </p>
+      </div>
+      <a
+        href="/rss.xml"
+        class="inline-flex items-center gap-1.5 text-xs font-mono text-fg-muted hover:text-accent link-dashed"
+      >
+        <SocialIcons name="RSS" class="w-3.5 h-3.5 text-accent" />
+        <span>RSS Feed</span>
+      </a>
+    </div>
+
+    <div class="flex flex-wrap gap-2" role="group" aria-label="Filter articles by category">
+      {filterButtons.map((btn, idx) => (
+        <button
+          type="button"
+          data-article-filter={btn.key}
+          aria-pressed={idx === 0 ? 'true' : 'false'}
+          class:list={[
+            'px-3 py-1.5 rounded-lg border text-xs font-mono transition-colors cursor-pointer',
+            idx === 0
+              ? 'bg-accent text-accent-fg border-accent'
+              : 'bg-surface border-border text-fg-muted hover:border-accent hover:text-fg',
+          ]}
+        >
+          {btn.label}
+        </button>
+      ))}
+    </div>
+
+    <div id="articles-archive" class="space-y-10 pt-2">
+      {yearGroups.map((yearGroup) => (
+        <section data-year-group class="space-y-6">
+          <h2 class="text-xl font-bold text-fg border-b border-accent/60 pb-2 flex items-baseline gap-1.5">
+            <span>{yearGroup.year}</span>
+            <sup class="text-xs font-mono text-fg-muted font-normal">{yearGroup.count}</sup>
+          </h2>
+
+          {yearGroup.months.map((monthGroup) => (
+            <div data-month-group class="space-y-2 sm:grid sm:grid-cols-[120px_1fr] sm:gap-6">
+              <h3 class="text-sm font-mono font-semibold text-fg-muted pt-3">
+                <span>{monthGroup.monthName}</span>
+                <sup class="text-[11px] font-normal ml-1">{monthGroup.articles.length}</sup>
+              </h3>
+
+              <ul class="divide-y divide-border/70">
+                {monthGroup.articles.map((article) => (
+                  <ArticleRow article={article} />
+                ))}
+              </ul>
+            </div>
+          ))}
+        </section>
+      ))}
+    </div>
+
+    <p id="articles-empty" class="hidden text-sm font-mono text-fg-muted py-6">
+      No published articles in this category yet.
+    </p>
+  </section>
+</BaseLayout>
+
+<script>
+  function initArticleFilters() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-article-filter]');
+    const yearGroups = document.querySelectorAll<HTMLElement>('[data-year-group]');
+    const emptyState = document.getElementById('articles-empty');
+    if (!buttons.length) return;
+
+    buttons.forEach((btn) => {
+      if (btn.dataset.bound) return;
+      btn.dataset.bound = 'true';
+
+      btn.addEventListener('click', () => {
+        const selected = btn.dataset.articleFilter || 'all';
+        buttons.forEach((b) => {
+          const active = b === btn;
+          b.setAttribute('aria-pressed', String(active));
+          b.className = active
+            ? 'px-3 py-1.5 rounded-lg border text-xs font-mono transition-colors cursor-pointer bg-accent text-accent-fg border-accent'
+            : 'px-3 py-1.5 rounded-lg border text-xs font-mono transition-colors cursor-pointer bg-surface border-border text-fg-muted hover:border-accent hover:text-fg';
+        });
+
+        let totalVisible = 0;
+
+        yearGroups.forEach((yearEl) => {
+          let yearVisible = 0;
+          const monthEls = yearEl.querySelectorAll<HTMLElement>('[data-month-group]');
+
+          monthEls.forEach((monthEl) => {
+            let monthVisible = 0;
+            monthEl.querySelectorAll<HTMLElement>('[data-article-item]').forEach((item) => {
+              const match = selected === 'all' || item.dataset.category === selected;
+              item.classList.toggle('hidden', !match);
+              if (match) monthVisible += 1;
+            });
+            monthEl.classList.toggle('hidden', monthVisible === 0);
+            yearVisible += monthVisible;
+          });
+
+          yearEl.classList.toggle('hidden', yearVisible === 0);
+          totalVisible += yearVisible;
+        });
+
+        emptyState?.classList.toggle('hidden', totalVisible > 0);
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initArticleFilters);
+</script>

@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleRow from '../../components/ArticleRow.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import ContentCard from '../../components/ContentCard.astro';
+import SocialIcons from '../../components/SocialIcons.astro';
+import { SITE } from '../../config/site';
+import {
+  type ArticleEntry,
+  type CreatorEntry,
+  type ProjectEntry,
+  collectTags,
+  getPublishedArticles,
+  getSortedCreatorItems,
+  getSortedProjects,
+  slugifyTag,
+} from '../../utils/content';
+
+interface Props {
+  tagSlug: string;
+  tagLabel: string;
+  articles: ArticleEntry[];
+  projects: ProjectEntry[];
+  creator: CreatorEntry[];
+}
+
+export async function getStaticPaths() {
+  const [articles, projects, creator] = await Promise.all([
+    getPublishedArticles(),
+    getSortedProjects(),
+    getSortedCreatorItems(),
+  ]);
+
+  const tags = collectTags(articles, projects, creator);
+
+  return tags.map((tag) => ({
+    params: { tag: tag.slug },
+    props: {
+      tagSlug: tag.slug,
+      tagLabel: tag.label,
+      articles: articles.filter((a) => a.data.tags.some((t) => slugifyTag(t) === tag.slug)),
+      projects: projects.filter((p) => p.data.tags.some((t) => slugifyTag(t) === tag.slug)),
+      creator: creator.filter((c) => c.data.tags.some((t) => slugifyTag(t) === tag.slug)),
+    },
+  }));
+}
+
+const { tagLabel, articles, projects, creator } = Astro.props;
+---
+
+<BaseLayout
+  title={`#${tagLabel} | ${SITE.name}`}
+  description={`Articles, projects, and content tagged with #${tagLabel}`}
+>
+  <section class="space-y-8">
+    <div>
+      <a
+        href="/tags"
+        class="inline-flex items-center gap-1.5 text-xs font-mono text-fg-muted hover:text-accent link-dashed mb-4"
+      >
+        <SocialIcons name="ArrowLeft" class="w-3.5 h-3.5" />
+        <span>All Tags</span>
+      </a>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-fg">
+        <span class="text-accent font-mono">#</span>{tagLabel}
+      </h1>
+    </div>
+
+    {articles.length > 0 && (
+      <section class="space-y-2">
+        <h2 class="text-lg font-bold text-fg">Articles ({articles.length})</h2>
+        <ul class="divide-y divide-border/70">
+          {articles.map((article) => (
+            <ArticleRow article={article} />
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {projects.length > 0 && (
+      <section class="space-y-3">
+        <h2 class="text-lg font-bold text-fg">Projects ({projects.length})</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {projects.map((project) => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+      </section>
+    )}
+
+    {creator.length > 0 && (
+      <section class="space-y-3">
+        <h2 class="text-lg font-bold text-fg">Content & Media ({creator.length})</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {creator.map((item) => (
+            <ContentCard item={item} />
+          ))}
+        </div>
+      </section>
+    )}
+  </section>
+</BaseLayout>

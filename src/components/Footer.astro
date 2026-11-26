@@ -1,0 +1,45 @@
+---
+import { SITE } from '../config/site';
+import SocialIcons from './SocialIcons.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="w-full max-w-3xl mx-auto px-4 sm:px-6 mt-16 pb-8">
+  <hr class="border-border mb-6" />
+
+  <div class="flex flex-col sm:flex-row-reverse sm:items-center sm:justify-between gap-4">
+    <div class="flex items-center justify-center sm:justify-end gap-4">
+      {SITE.socials.map((s) => (
+        <a
+          href={s.href}
+          target={s.href.startsWith('http') ? '_blank' : undefined}
+          rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+          aria-label={s.label}
+          title={s.label}
+          class="text-fg-muted hover:text-accent hover:rotate-6 transition-all"
+        >
+          <SocialIcons name={s.name} class="w-5 h-5" />
+        </a>
+      ))}
+      <a
+        href="/rss.xml"
+        aria-label="RSS Feed"
+        title="RSS Feed"
+        class="text-fg-muted hover:text-accent hover:rotate-6 transition-all"
+      >
+        <SocialIcons name="RSS" class="w-5 h-5" />
+      </a>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-1 text-xs font-mono text-fg-muted">
+      <span>&copy; {year} {SITE.name}</span>
+      <span aria-hidden="true">·</span>
+      <a href="/tags" class="link-dashed">Tags</a>
+      <span aria-hidden="true">·</span>
+      <a href="/llms.txt" class="link-dashed">llms.txt</a>
+      <span aria-hidden="true">·</span>
+      <a href="/about.md" class="link-dashed">about.md</a>
+    </div>
+  </div>
+</footer>

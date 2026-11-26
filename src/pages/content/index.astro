@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContentCard from '../../components/ContentCard.astro';
+import { SITE } from '../../config/site';
+import { getSortedCreatorItems } from '../../utils/content';
+
+const items = await getSortedCreatorItems();
+
+const platforms = [
+  { key: 'all', label: 'All' },
+  { key: 'youtube', label: 'YouTube' },
+  { key: 'thread', label: 'X Threads' },
+  { key: 'podcast', label: 'Podcasts' },
+  { key: 'talk', label: 'Talks' },
+];
+---
+
+<BaseLayout
+  title={`Content | ${SITE.name}`}
+  description={`Videos, threads, podcasts, and talks by ${SITE.name}`}
+>
+  <section class="space-y-6">
+    <div class="space-y-2">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-fg">Content & Media</h1>
+      <p class="text-sm sm:text-base text-fg-muted">
+        Build walkthroughs, legal-tech breakdowns, podcasts, and talks.
+      </p>
+    </div>
+
+    <div class="flex flex-wrap gap-2" role="group" aria-label="Filter content by platform">
+      {platforms.map((platform, idx) => (
+        <button
+          type="button"
+          data-platform-filter={platform.key}
+          aria-pressed={idx === 0 ? 'true' : 'false'}
+          class:list={[
+            'px-3 py-1.5 rounded-lg border text-xs font-mono transition-colors cursor-pointer',
+            idx === 0
+              ? 'bg-accent text-accent-fg border-accent'
+              : 'bg-surface border-border text-fg-muted hover:border-accent hover:text-fg',
+          ]}
+        >
+          {platform.label}
+        </button>
+      ))}
+    </div>
+
+    <div id="content-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {items.map((item) => (
+        <ContentCard item={item} />
+      ))}
+    </div>
+
+    <p id="content-empty" class="hidden text-sm font-mono text-fg-muted py-6">
+      No content items match this filter yet.
+    </p>
+  </section>
+</BaseLayout>
+
+<script>
+  function initContentFilter() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-platform-filter]');
+    const cards = document.querySelectorAll<HTMLElement>('[data-content-card]');
+    const emptyState = document.getElementById('content-empty');
+    if (!buttons.length) return;
+
+    buttons.forEach((btn) => {
+      if (btn.dataset.bound) return;
+      btn.dataset.bound = 'true';
+
+      btn.addEventListener('click', () => {
+        const selected = btn.dataset.platformFilter || 'all';
+        buttons.forEach((b) => {
+          const active = b === btn;
+          b.setAttribute('aria-pressed', String(active));
+          b.className = active
+            ? 'px-3 py-1.5 rounded-lg border text-xs font-mono transition-colors cursor-pointer bg-accent text-accent-fg border-accent'
+            : 'px-3 py-1.5 rounded-lg border text-xs font-mono transition-colors cursor-pointer bg-surface border-border text-fg-muted hover:border-accent hover:text-fg';
+        });
+
+        let visible = 0;
+        cards.forEach((card) => {
+          const match = selected === 'all' || card.dataset.platform === selected;
+          card.classList.toggle('hidden', !match);
+          if (match) visible += 1;
+        });
+
+        emptyState?.classList.toggle('hidden', visible > 0);
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initContentFilter);
+</script>

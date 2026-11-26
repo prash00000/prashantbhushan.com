@@ -1,0 +1,61 @@
+---
+import { CATEGORIES } from '../config/site';
+import { type ArticleEntry, formatDate, getReadingTime, slugifyTag } from '../utils/content';
+import SocialIcons from './SocialIcons.astro';
+
+interface Props {
+  article: ArticleEntry;
+  showTags?: boolean;
+}
+
+const { article, showTags = true } = Astro.props;
+const readingTime = getReadingTime(article.body);
+const categoryMeta = CATEGORIES[article.data.category];
+---
+
+<li class="group py-4 first:pt-2" data-article-item data-category={article.data.category}>
+  <article class="space-y-1.5">
+    <div class="flex flex-wrap items-baseline justify-between gap-2">
+      <a
+        href={`/articles/${article.id}`}
+        transition:name={`article-title-${article.id}`}
+        class="text-lg font-semibold text-accent hover:underline decoration-dashed underline-offset-4 leading-snug"
+      >
+        {article.data.title}
+      </a>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs font-mono text-fg-muted">
+      <span class="inline-flex items-center gap-1.5 italic">
+        <SocialIcons name="Calendar" class="w-3.5 h-3.5 opacity-80" />
+        <time datetime={article.data.pubDate.toISOString()}>
+          {formatDate(article.data.pubDate)}
+        </time>
+      </span>
+      <span aria-hidden="true">·</span>
+      <span>{readingTime}</span>
+      <span aria-hidden="true">·</span>
+      <span class="px-2 py-0.5 rounded-md bg-surface-muted border border-border text-fg font-medium">
+        {categoryMeta.label}
+      </span>
+    </div>
+
+    <p class="text-sm text-fg-muted leading-relaxed pt-0.5">
+      {article.data.description}
+    </p>
+
+    {showTags && article.data.tags.length > 0 && (
+      <div class="flex flex-wrap gap-x-3 gap-y-1 pt-1">
+        {article.data.tags.map((tag) => (
+          <a
+            href={`/tags/${slugifyTag(tag)}`}
+            class="inline-flex items-center gap-0.5 text-xs font-mono text-fg-muted hover:text-accent link-dashed"
+          >
+            <span>#</span>
+            <span>{tag}</span>
+          </a>
+        ))}
+      </div>
+    )}
+  </article>
+</li>
