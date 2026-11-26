@@ -4,7 +4,7 @@ description: "Conference talk & slide deck on privacy-by-design, open-source lic
 pubDate: 2026-08-27
 platform: talk
 url: "https://linkedin.com/in/prashantbasthana"
-durationOrFormat: "30 min talk"
+durationOrFormat: "30 min"
 tags:
   - law
   - open-source

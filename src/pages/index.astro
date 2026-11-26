@@ -16,7 +16,7 @@ const articles = await getPublishedArticles();
 const recentArticles = articles.slice(0, 6);
 
 const projects = await getSortedProjects();
-const featuredProjects = projects.filter((p) => p.data.featured).slice(0, 4);
+const featuredProjects = projects.filter((p) => p.data.featured).slice(0, 2);
 
 const creatorItems = await getSortedCreatorItems();
 const featuredContent = creatorItems.filter((c) => c.data.featured).slice(0, 2);
@@ -37,12 +37,12 @@ const personSchema = {
   <!-- Hero -->
   <section id="hero" class="pb-8">
     <div class="flex flex-col sm:flex-row sm:items-start gap-5 sm:gap-6">
-      <a
-        href="/about"
-        aria-label={`About ${SITE.name}`}
-        class="shrink-0 group focus:outline-none"
-      >
-        {SITE.avatarSrc ? (
+      {SITE.avatarSrc && (
+        <a
+          href="/about"
+          aria-label={`About ${SITE.name}`}
+          class="shrink-0 group rounded-2xl"
+        >
           <img
             src={SITE.avatarSrc}
             alt={SITE.name}
@@ -50,54 +50,19 @@ const personSchema = {
             height="96"
             class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border border-border group-hover:border-accent transition-colors"
           />
-        ) : (
-          <div
-            class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border border-border bg-surface-muted flex items-center justify-center overflow-hidden group-hover:border-accent transition-colors"
-            aria-hidden="true"
-          >
-            <span class="font-mono text-2xl sm:text-3xl font-bold tracking-tight text-accent">
-              {SITE.monogram}
-            </span>
-          </div>
-        )}
-      </a>
+        </a>
+      )}
 
-      <div class="space-y-3">
-        <div class="flex flex-wrap items-center gap-2.5">
-          <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-fg">
-            {SITE.heroGreeting}
-          </h1>
-          <span class="font-mono text-xs px-2 py-0.5 rounded-md bg-surface-muted border border-border text-fg-muted">
-            {SITE.handle}
-          </span>
-          <a
-            href="/rss.xml"
-            aria-label="Subscribe via RSS"
-            title="RSS Feed"
-            class="inline-flex items-center justify-center p-1.5 rounded-md text-accent hover:bg-accent-soft transition-colors"
-          >
-            <SocialIcons name="RSS" class="w-5 h-5" />
-          </a>
-        </div>
+      <div class="space-y-4">
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-fg leading-tight">
+          {SITE.heroGreeting}
+        </h1>
 
-        <p class="text-base text-fg-muted leading-relaxed">
+        <p class="text-base text-fg-muted leading-relaxed max-w-2xl">
           {SITE.heroTagline}
         </p>
 
-        <div class="flex flex-wrap items-center gap-2 pt-1">
-          {SITE.roles.map((role) => (
-            <a
-              href={role.href}
-              class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-border bg-surface text-xs font-mono text-fg hover:border-accent hover:text-accent transition-colors"
-            >
-              <span class="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true" />
-              <span>{role.label}</span>
-            </a>
-          ))}
-        </div>
-
-        <div class="flex flex-wrap items-center gap-3.5 pt-1.5">
-          <span class="text-xs font-mono text-fg-muted">Connect:</span>
+        <div class="flex flex-wrap items-center gap-1.5 pt-0.5">
           {SITE.socials.map((s) => (
             <a
               href={s.href}
@@ -105,11 +70,19 @@ const personSchema = {
               rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
               aria-label={s.label}
               title={s.label}
-              class="text-fg-muted hover:text-accent hover:-translate-y-0.5 transition-all"
+              class="inline-flex items-center justify-center p-2 -ml-1 first:ml-0 rounded-lg text-fg-muted hover:text-accent hover:bg-surface-muted transition-colors"
             >
               <SocialIcons name={s.name} class="w-5 h-5" />
             </a>
           ))}
+          <a
+            href="/rss.xml"
+            aria-label="Subscribe via RSS"
+            title="RSS Feed"
+            class="inline-flex items-center justify-center p-2 rounded-lg text-fg-muted hover:text-accent hover:bg-surface-muted transition-colors"
+          >
+            <SocialIcons name="RSS" class="w-5 h-5" />
+          </a>
         </div>
       </div>
     </div>
@@ -117,20 +90,15 @@ const personSchema = {
 
   <hr class="border-border" />
 
-  <!-- Featured Projects (Vibe Coding) -->
+  <!-- Featured Projects -->
   <section aria-labelledby="featured-projects-heading" class="py-8">
     <div class="flex items-baseline justify-between gap-4 mb-5">
-      <div>
-        <h2 id="featured-projects-heading" class="text-xl font-bold tracking-tight text-fg">
-          Selected Projects
-        </h2>
-        <p class="text-sm text-fg-muted mt-0.5">
-          Tools and experiments vibe-coded around law, AI, and writing.
-        </p>
-      </div>
+      <h2 id="featured-projects-heading" class="text-xl font-bold tracking-tight text-fg">
+        Selected Projects
+      </h2>
       <a
         href="/projects"
-        class="inline-flex items-center gap-1 text-sm font-mono text-accent link-dashed shrink-0"
+        class="inline-flex items-center gap-1 py-1 text-sm font-mono text-accent link-dashed shrink-0"
       >
         <span>All Projects</span>
         <SocialIcons name="ArrowRight" class="w-4 h-4" />
@@ -149,17 +117,12 @@ const personSchema = {
   <!-- Recent Articles -->
   <section aria-labelledby="recent-articles-heading" class="py-8">
     <div class="flex items-baseline justify-between gap-4 mb-3">
-      <div>
-        <h2 id="recent-articles-heading" class="text-xl font-bold tracking-tight text-fg">
-          Recent Articles
-        </h2>
-        <p class="text-sm text-fg-muted mt-0.5">
-          Essays on technology law, agentic workflows, and shipping software.
-        </p>
-      </div>
+      <h2 id="recent-articles-heading" class="text-xl font-bold tracking-tight text-fg">
+        Recent Articles
+      </h2>
       <a
         href="/articles"
-        class="inline-flex items-center gap-1 text-sm font-mono text-accent link-dashed shrink-0"
+        class="inline-flex items-center gap-1 py-1 text-sm font-mono text-accent link-dashed shrink-0"
       >
         <span>All Articles</span>
         <SocialIcons name="ArrowRight" class="w-4 h-4" />
@@ -168,19 +131,9 @@ const personSchema = {
 
     <ul class="divide-y divide-border/70">
       {recentArticles.map((article) => (
-        <ArticleRow article={article} />
+        <ArticleRow article={article} showTags={false} />
       ))}
     </ul>
-
-    <div class="mt-6 text-center">
-      <a
-        href="/articles"
-        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-border bg-surface text-sm font-mono text-fg hover:border-accent hover:text-accent transition-colors"
-      >
-        <span>Browse All Articles ({articles.length})</span>
-        <SocialIcons name="ArrowRight" class="w-4 h-4" />
-      </a>
-    </div>
   </section>
 
   <hr class="border-border" />
@@ -188,17 +141,12 @@ const personSchema = {
   <!-- Featured Content Creation -->
   <section aria-labelledby="recent-content-heading" class="py-8">
     <div class="flex items-baseline justify-between gap-4 mb-5">
-      <div>
-        <h2 id="recent-content-heading" class="text-xl font-bold tracking-tight text-fg">
-          Videos, Threads & Talks
-        </h2>
-        <p class="text-sm text-fg-muted mt-0.5">
-          Building in public across video walkthroughs, threads, and podcasts.
-        </p>
-      </div>
+      <h2 id="recent-content-heading" class="text-xl font-bold tracking-tight text-fg">
+        Videos, Threads & Talks
+      </h2>
       <a
         href="/content"
-        class="inline-flex items-center gap-1 text-sm font-mono text-accent link-dashed shrink-0"
+        class="inline-flex items-center gap-1 py-1 text-sm font-mono text-accent link-dashed shrink-0"
       >
         <span>All Content</span>
         <SocialIcons name="ArrowRight" class="w-4 h-4" />

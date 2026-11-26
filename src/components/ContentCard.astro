@@ -4,9 +4,11 @@ import SocialIcons from './SocialIcons.astro';
 
 interface Props {
   item: CreatorEntry;
+  headingLevel?: 'h2' | 'h3';
 }
 
-const { item } = Astro.props;
+const { item, headingLevel = 'h3' } = Astro.props;
+const HeadingTag = headingLevel;
 
 const platformLabels: Record<CreatorEntry['data']['platform'], string> = {
   youtube: 'YouTube',
@@ -23,17 +25,22 @@ const platformLabels: Record<CreatorEntry['data']['platform'], string> = {
 >
   <div class="flex flex-wrap items-center justify-between gap-2 mb-2 text-xs font-mono text-fg-muted">
     <div class="flex items-center gap-2">
-      <span class="px-2 py-0.5 rounded-md bg-accent-soft text-accent font-medium border border-border/60">
+      <span class="uppercase tracking-wider text-accent font-medium">
         {platformLabels[item.data.platform]}
       </span>
-      {item.data.durationOrFormat && <span>{item.data.durationOrFormat}</span>}
+      {item.data.durationOrFormat && (
+        <>
+          <span aria-hidden="true">·</span>
+          <span>{item.data.durationOrFormat}</span>
+        </>
+      )}
     </div>
     <time datetime={item.data.pubDate.toISOString()} class="italic">
       {formatDate(item.data.pubDate)}
     </time>
   </div>
 
-  <h3 class="text-base font-semibold text-fg leading-snug">
+  <HeadingTag class="text-base font-semibold text-fg leading-snug">
     <a
       href={item.data.url}
       target="_blank"
@@ -43,7 +50,7 @@ const platformLabels: Record<CreatorEntry['data']['platform'], string> = {
       <span>{item.data.title}</span>
       <SocialIcons name="ArrowUpRight" class="w-4 h-4 shrink-0 mt-0.5 opacity-75" />
     </a>
-  </h3>
+  </HeadingTag>
 
   <p class="mt-1.5 text-sm text-fg-muted leading-relaxed">
     {item.data.description}

@@ -4,7 +4,7 @@ description: "Podcast conversation on dual-career fluency, AI-accelerated softwa
 pubDate: 2026-10-02
 platform: podcast
 url: "https://youtube.com/@prashantbasthana"
-durationOrFormat: "48 min episode"
+durationOrFormat: "48 min"
 tags:
   - law
   - ai

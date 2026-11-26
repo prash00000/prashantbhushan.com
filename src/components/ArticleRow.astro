@@ -8,7 +8,7 @@ interface Props {
   showTags?: boolean;
 }
 
-const { article, showTags = true } = Astro.props;
+const { article, showTags = false } = Astro.props;
 const readingTime = getReadingTime(article.body);
 const categoryMeta = CATEGORIES[article.data.category];
 ---
@@ -25,7 +25,7 @@ const categoryMeta = CATEGORIES[article.data.category];
       </a>
     </div>
 
-    <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs font-mono text-fg-muted">
+    <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-mono text-fg-muted">
       <span class="inline-flex items-center gap-1.5 italic">
         <SocialIcons name="Calendar" class="w-3.5 h-3.5 opacity-80" />
         <time datetime={article.data.pubDate.toISOString()}>
@@ -35,9 +35,7 @@ const categoryMeta = CATEGORIES[article.data.category];
       <span aria-hidden="true">·</span>
       <span>{readingTime}</span>
       <span aria-hidden="true">·</span>
-      <span class="px-2 py-0.5 rounded-md bg-surface-muted border border-border text-fg font-medium">
-        {categoryMeta.label}
-      </span>
+      <span>{categoryMeta.label}</span>
     </div>
 
     <p class="text-sm text-fg-muted leading-relaxed pt-0.5">

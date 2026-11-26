@@ -179,14 +179,14 @@ const articleSchema = {
     )}
 
     <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-border">
-      <div class="flex flex-wrap items-center gap-3 text-xs font-mono text-fg-muted">
-        <span>Share:</span>
+      <div class="flex flex-wrap items-center gap-1.5 text-xs font-mono text-fg-muted">
+        <span class="mr-1.5">Share:</span>
         <a
           href={`https://x.com/intent/tweet?text=${shareText}&url=${encodedUrl}`}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Share on X"
-          class="hover:text-accent transition-colors"
+          class="inline-flex items-center justify-center p-2 rounded-lg text-fg-muted hover:text-accent hover:bg-surface-muted transition-colors"
         >
           <SocialIcons name="X" class="w-4 h-4" />
         </a>
@@ -195,14 +195,14 @@ const articleSchema = {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Share on LinkedIn"
-          class="hover:text-accent transition-colors"
+          class="inline-flex items-center justify-center p-2 rounded-lg text-fg-muted hover:text-accent hover:bg-surface-muted transition-colors"
         >
           <SocialIcons name="LinkedIn" class="w-4 h-4" />
         </a>
         <a
           href={`mailto:?subject=${encodeURIComponent(article.data.title)}&body=${encodedUrl}`}
           aria-label="Share via Email"
-          class="hover:text-accent transition-colors"
+          class="inline-flex items-center justify-center p-2 rounded-lg text-fg-muted hover:text-accent hover:bg-surface-muted transition-colors"
         >
           <SocialIcons name="Email" class="w-4 h-4" />
         </a>
@@ -211,7 +211,7 @@ const articleSchema = {
       <button
         id="back-to-top-btn"
         type="button"
-        class="inline-flex items-center gap-1.5 text-xs font-mono text-fg-muted hover:text-accent cursor-pointer transition-colors"
+        class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-mono text-fg-muted hover:text-accent hover:bg-surface-muted cursor-pointer transition-colors"
       >
         <SocialIcons name="ArrowUp" class="w-3.5 h-3.5" />
         <span>Back to Top</span>

@@ -17,28 +17,28 @@ const isActive = (href: string) => {
     Skip to content
   </a>
 
-  <div class="flex items-center justify-between py-5 sm:py-6 gap-4">
+  <div class="flex items-center justify-between py-5 sm:py-6 gap-2 sm:gap-4">
     <a
       href="/"
-      class="flex items-center gap-2.5 text-lg sm:text-xl font-bold tracking-tight text-fg hover:text-accent transition-colors whitespace-nowrap"
+      class="min-w-0 flex items-center gap-2 sm:gap-2.5 text-base sm:text-xl font-bold tracking-tight text-fg hover:text-accent transition-colors"
     >
       <span
-        class="inline-flex items-center justify-center w-7 h-7 rounded-md bg-accent-soft text-accent font-mono text-xs font-bold border border-border"
+        class="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-md bg-accent-soft text-accent font-mono text-xs font-bold border border-border"
         aria-hidden="true"
       >
         {SITE.monogram}
       </span>
-      <span>{SITE.name}</span>
+      <span class="truncate">{SITE.name}</span>
     </a>
 
-    <div class="flex items-center gap-1 sm:gap-2">
+    <div class="flex items-center gap-0.5 sm:gap-2 shrink-0">
       <nav aria-label="Primary" class="hidden sm:flex items-center gap-5 mr-2">
         {SITE.nav.map((item) => (
           <a
             href={item.href}
             aria-current={isActive(item.href) ? 'page' : undefined}
             class:list={[
-              'text-sm font-medium transition-colors hover:text-accent',
+              'py-1.5 text-sm font-medium transition-colors hover:text-accent',
               isActive(item.href) ? 'active-nav text-fg' : 'text-fg-muted',
             ]}
           >

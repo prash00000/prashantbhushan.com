@@ -41,9 +41,10 @@ const hasLiveAction = Boolean(SITE.newsletter.actionUrl);
       id="newsletter-email"
       type="email"
       name="email"
+      autocomplete="email"
       required
       placeholder={SITE.newsletter.placeholderEmail}
-      class="flex-1 px-3.5 py-2.5 rounded-lg border border-border bg-surface text-sm text-fg placeholder:text-fg-muted/70 focus:outline-none focus:border-accent"
+      class="flex-1 px-3.5 py-2.5 rounded-lg border border-border bg-surface text-sm text-fg placeholder:text-fg-muted/70 focus:border-accent"
     />
     <button
       type="submit"
@@ -53,7 +54,7 @@ const hasLiveAction = Boolean(SITE.newsletter.actionUrl);
     </button>
   </form>
 
-  <p data-newsletter-status class="hidden mt-3 text-xs font-mono text-accent"></p>
+  <p data-newsletter-status aria-live="polite" class="hidden mt-3 text-xs font-mono text-accent"></p>
 </section>
 
 <script>

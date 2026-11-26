@@ -4,7 +4,7 @@ description: "Full unedited build walkthrough showing prompts, TypeScript guardr
 pubDate: 2026-11-12
 platform: youtube
 url: "https://youtube.com/@prashantbasthana"
-durationOrFormat: "24 min video"
+durationOrFormat: "24 min"
 tags:
   - vibe-coding
   - youtube

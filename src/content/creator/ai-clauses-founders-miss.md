@@ -4,7 +4,7 @@ description: "Practical thread breaking down training data rights, model indemni
 pubDate: 2026-10-28
 platform: thread
 url: "https://x.com/prashantbasthana"
-durationOrFormat: "12-part X thread"
+durationOrFormat: "12 parts"
 tags:
   - law
   - ai

@@ -47,9 +47,9 @@ export const SITE = {
   siteUrl: 'https://prashantbhushan.com', // Production domain (overridden automatically on Vercel via VERCEL_PROJECT_PRODUCTION_URL)
   avatarSrc: null as string | null, // Drop a photo in public/avatar.jpg and change this to '/avatar.jpg'
   location: 'India · Remote',
-  heroGreeting: "Hi, I'm Prashant Bhushan.",
+  heroGreeting: 'Lawyer, Vibe Coder & Writer.',
   heroTagline:
-    'Lawyer by training, vibe coder by obsession. Building AI-assisted software tools, creating content, and writing at the intersection of law, technology, and craft.',
+    'Counsel for tech and AI startups. On evenings and weekends, I build legal-tech utilities and document the work in writing and video.',
   roles: [
     {
       key: 'law',
@@ -93,9 +93,9 @@ export const SITE = {
     { name: 'Email', href: 'mailto:hello@prashantbasthana.com', label: 'Email' },
   ] satisfies SocialLink[],
   newsletter: {
-    heading: 'Notes on Law, Code & Building',
+    heading: 'Dispatches',
     description:
-      'Occasional essays on legal-tech, vibe-coding workflows, and new tools I ship. Zero spam, unsubscribe anytime.',
+      'Occasional notes when a new essay or tool goes live. Zero spam, unsubscribe anytime.',
     actionUrl: '', // Optional: paste your Buttondown / ConvertKit / Substack form POST URL
     placeholderEmail: 'you@domain.com',
   },
