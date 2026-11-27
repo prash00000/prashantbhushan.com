@@ -2,21 +2,28 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SocialIcons from '../../components/SocialIcons.astro';
 import { SITE } from '../../config/site';
+
+const tagPillClass: Record<string, string> = {
+  'Law & Litigation': 'cat-law',
+  'Civic Tech': 'cat-writing',
+  'Tax & ERP': 'cat-code',
+  Writing: 'cat-media',
+};
 ---
 
 <BaseLayout
   title={`Practice | ${SITE.name}`}
-  description={`Legal practice and legal-tech advisory by ${SITE.name}`}
+  description={`Law, litigation research, and civic legal-tech work by ${SITE.name}`}
 >
   <section class="space-y-8">
     <div class="space-y-3">
       <div class="flex flex-wrap items-baseline justify-between gap-3">
-        <span class="text-xs font-mono uppercase tracking-wider text-accent font-semibold">
-          Legal Practice & Advisory
+        <span class="cat-pill cat-law">
+          Legal Practice &amp; Research
         </span>
         <a
           href="/practice.md"
-          class="inline-flex items-center gap-1.5 text-xs font-mono text-fg-muted hover:text-accent link-dashed"
+          class="inline-flex items-center gap-1.5 py-1 text-xs font-mono text-fg-muted hover:text-accent link-dashed"
         >
           <SocialIcons name="FileText" class="w-3.5 h-3.5" />
           <span>practice.md</span>
@@ -30,23 +37,23 @@ import { SITE } from '../../config/site';
       </p>
     </div>
 
-    <aside class="rounded-xl border border-border bg-surface-muted/60 p-4 text-xs font-mono text-fg-muted leading-relaxed">
+    <aside class="rounded-xl border border-border bg-surface-muted/70 p-4 text-xs font-mono text-fg-muted leading-relaxed">
       {SITE.practice.disclaimer}
     </aside>
 
     <div class="space-y-4">
-      <h2 class="text-xl font-bold tracking-tight text-fg">Core Advisory Areas</h2>
+      <h2 class="text-xl font-bold tracking-tight text-fg">Core Focus Areas</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {SITE.practice.areas.map((area) => (
-          <article class="rounded-xl border border-border bg-surface p-5 space-y-3">
+          <article class="surface-card rounded-xl p-5 space-y-3">
             <div class="flex items-center justify-between gap-2">
-              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-accent-soft text-accent font-medium">
+              <span class:list={['cat-pill', tagPillClass[area.tag] ?? 'cat-law']}>
                 {area.tag}
               </span>
             </div>
-            <h3 class="text-base font-bold text-fg">{area.title}</h3>
+            <h3 class="text-base font-bold tracking-tight text-fg">{area.title}</h3>
             <p class="text-sm text-fg-muted leading-relaxed">{area.summary}</p>
-            <ul class="space-y-1.5 pt-2 border-t border-border/70 text-xs text-fg-muted">
+            <ul class="space-y-1.5 pt-2.5 border-t border-border text-xs text-fg-muted">
               {area.deliverables.map((item) => (
                 <li class="flex items-start gap-2">
                   <span class="font-mono text-accent">·</span>
@@ -62,11 +69,11 @@ import { SITE } from '../../config/site';
     <hr class="border-border" />
 
     <div class="space-y-4">
-      <h2 class="text-xl font-bold tracking-tight text-fg">How We Can Work Together</h2>
+      <h2 class="text-xl font-bold tracking-tight text-fg">How We Can Collaborate</h2>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {SITE.practice.engagements.map((eng) => (
-          <div class="rounded-xl border border-border bg-surface p-4 space-y-2">
-            <p class="text-[11px] font-mono text-accent font-medium">{eng.cadence}</p>
+          <div class="surface-card rounded-xl p-4 space-y-2">
+            <p class="text-[11px] font-mono text-accent font-semibold">{eng.cadence}</p>
             <h3 class="text-sm font-bold text-fg">{eng.title}</h3>
             <p class="text-xs text-fg-muted leading-relaxed">{eng.description}</p>
           </div>
@@ -74,11 +81,11 @@ import { SITE } from '../../config/site';
       </div>
     </div>
 
-    <section class="rounded-xl border border-border bg-surface p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <section class="surface-card rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div class="space-y-1">
-        <h2 class="text-lg font-bold text-fg">Need legal perspective on a build or deal?</h2>
+        <h2 class="text-lg font-bold tracking-tight text-fg">Get in touch</h2>
         <p class="text-sm text-fg-muted">
-          Send a brief overview of your product, timeline, or speaking invitation.
+          Send a note about legal research, civic-tech tooling, or software collaboration.
         </p>
       </div>
       <a
@@ -86,7 +93,7 @@ import { SITE } from '../../config/site';
         class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-accent text-accent-fg text-sm font-semibold hover:opacity-90 transition-opacity shrink-0"
       >
         <SocialIcons name="Email" class="w-4 h-4" />
-        <span>Get in Touch</span>
+        <span>Send Email</span>
       </a>
     </section>
   </section>

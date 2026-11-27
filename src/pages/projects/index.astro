@@ -8,7 +8,7 @@ import { getSortedProjects } from '../../utils/content';
 const projects = await getSortedProjects();
 
 const domains = [
-  { key: 'all', label: 'All' },
+  { key: 'all', label: `All (${projects.length})` },
   { key: 'legal-tech', label: 'Legal-Tech' },
   { key: 'erp-pos', label: 'ERP & POS' },
   { key: 'web-app', label: 'Web' },
@@ -17,37 +17,32 @@ const domains = [
 
 <BaseLayout
   title={`Projects | ${SITE.name}`}
-  description={`Vibe-coded software tools, legal-tech apps, and open-source experiments by ${SITE.name}`}
+  description={`Civic legal-tech tools, offline-first ERPs, and web applications by ${SITE.name}`}
 >
   <section class="space-y-6">
     <div class="flex flex-wrap items-baseline justify-between gap-3">
       <div class="space-y-1.5">
         <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-fg">Projects</h1>
         <p class="text-sm sm:text-base text-fg-muted">
-          Software tools, legal-tech utilities, and weekend vibe-coded experiments.
+          Civic legal-tech platforms, offline-first desktop ERPs, and open-source web tools.
         </p>
       </div>
       <a
         href="/projects.md"
-        class="inline-flex items-center gap-1.5 text-xs font-mono text-fg-muted hover:text-accent link-dashed"
+        class="inline-flex items-center gap-1.5 py-1 text-xs font-mono text-fg-muted hover:text-accent link-dashed"
       >
         <SocialIcons name="FileText" class="w-3.5 h-3.5" />
         <span>projects.md</span>
       </a>
     </div>
 
-    <div class="flex flex-wrap gap-2" role="group" aria-label="Filter projects by domain">
+    <div class="segmented-track" role="group" aria-label="Filter projects by domain">
       {domains.map((domain, idx) => (
         <button
           type="button"
           data-domain-filter={domain.key}
           aria-pressed={idx === 0 ? 'true' : 'false'}
-          class:list={[
-            'px-3 py-1.5 rounded-lg border text-xs font-mono transition-colors cursor-pointer',
-            idx === 0
-              ? 'bg-accent text-accent-fg border-accent'
-              : 'bg-surface border-border text-fg-muted hover:border-accent hover:text-fg',
-          ]}
+          class="segmented-item tabular-nums"
         >
           {domain.label}
         </button>
@@ -80,11 +75,7 @@ const domains = [
       btn.addEventListener('click', () => {
         const selected = btn.dataset.domainFilter || 'all';
         buttons.forEach((b) => {
-          const active = b === btn;
-          b.setAttribute('aria-pressed', String(active));
-          b.className = active
-            ? 'px-3 py-1.5 rounded-lg border text-xs font-mono transition-colors cursor-pointer bg-accent text-accent-fg border-accent'
-            : 'px-3 py-1.5 rounded-lg border text-xs font-mono transition-colors cursor-pointer bg-surface border-border text-fg-muted hover:border-accent hover:text-fg';
+          b.setAttribute('aria-pressed', String(b === btn));
         });
 
         let visible = 0;

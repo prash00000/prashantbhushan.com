@@ -35,34 +35,34 @@ const personSchema = {
 
 <BaseLayout title={SITE.title} description={SITE.description} structuredData={personSchema}>
   <!-- Hero -->
-  <section id="hero" class="pb-8">
+  <section id="hero" class="pt-2 pb-10">
     <div class="flex flex-col sm:flex-row sm:items-start gap-5 sm:gap-6">
       {SITE.avatarSrc && (
         <a
           href="/about"
           aria-label={`About ${SITE.name}`}
-          class="shrink-0 group rounded-2xl"
+          class="shrink-0 group rounded-2xl w-fit"
         >
           <img
             src={SITE.avatarSrc}
             alt={SITE.name}
             width="96"
             height="96"
-            class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border border-border group-hover:border-accent transition-colors"
+            class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border border-border shadow-xs group-hover:border-border-strong transition-colors"
           />
         </a>
       )}
 
-      <div class="space-y-4">
-        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-fg leading-tight">
+      <div class="space-y-4 min-w-0">
+        <h1 class="text-[clamp(1.5rem,1.25rem+1.2vw,2rem)] font-bold tracking-tight text-fg leading-tight">
           {SITE.heroGreeting}
         </h1>
 
-        <p class="text-base text-fg-muted leading-relaxed max-w-2xl">
+        <p class="text-[0.975rem] text-fg-muted leading-relaxed max-w-2xl">
           {SITE.heroTagline}
         </p>
 
-        <div class="flex flex-wrap items-center gap-1.5 pt-0.5">
+        <div class="flex flex-wrap items-center gap-2 pt-0.5">
           {SITE.socials.map((s) => (
             <a
               href={s.href}
@@ -70,18 +70,18 @@ const personSchema = {
               rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
               aria-label={s.label}
               title={s.label}
-              class="inline-flex items-center justify-center p-2 -ml-1 first:ml-0 rounded-lg text-fg-muted hover:text-accent hover:bg-surface-muted transition-colors"
+              class="inline-flex items-center justify-center p-2 rounded-lg bg-surface border border-border text-fg-muted hover:text-accent hover:border-border-strong transition-colors"
             >
-              <SocialIcons name={s.name} class="w-5 h-5" />
+              <SocialIcons name={s.name} class="w-[18px] h-[18px]" />
             </a>
           ))}
           <a
             href="/rss.xml"
             aria-label="Subscribe via RSS"
             title="RSS Feed"
-            class="inline-flex items-center justify-center p-2 rounded-lg text-fg-muted hover:text-accent hover:bg-surface-muted transition-colors"
+            class="inline-flex items-center justify-center p-2 rounded-lg bg-surface border border-border text-fg-muted hover:text-accent hover:border-border-strong transition-colors"
           >
-            <SocialIcons name="RSS" class="w-5 h-5" />
+            <SocialIcons name="RSS" class="w-[18px] h-[18px]" />
           </a>
         </div>
       </div>
@@ -90,17 +90,20 @@ const personSchema = {
 
   <hr class="border-border" />
 
-  <!-- Featured Projects -->
-  <section aria-labelledby="featured-projects-heading" class="py-8">
+  <!-- 01 · Featured Projects -->
+  <section aria-labelledby="featured-projects-heading" class="py-9">
     <div class="flex items-baseline justify-between gap-4 mb-5">
-      <h2 id="featured-projects-heading" class="text-xl font-bold tracking-tight text-fg">
-        Selected Projects
-      </h2>
+      <div class="flex items-baseline gap-2.5">
+        <span class="text-xs font-mono tabular-nums text-accent font-semibold" aria-hidden="true">01</span>
+        <h2 id="featured-projects-heading" class="text-xl font-bold tracking-tight text-fg">
+          Selected Projects
+        </h2>
+      </div>
       <a
         href="/projects"
-        class="inline-flex items-center gap-1 py-1 text-sm font-mono text-accent link-dashed shrink-0"
+        class="inline-flex items-center gap-1 py-1 text-xs sm:text-sm font-mono tabular-nums text-accent link-dashed shrink-0"
       >
-        <span>All Projects</span>
+        <span>All Projects ({projects.length})</span>
         <SocialIcons name="ArrowRight" class="w-4 h-4" />
       </a>
     </div>
@@ -114,41 +117,47 @@ const personSchema = {
 
   <hr class="border-border" />
 
-  <!-- Recent Articles -->
-  <section aria-labelledby="recent-articles-heading" class="py-8">
-    <div class="flex items-baseline justify-between gap-4 mb-3">
-      <h2 id="recent-articles-heading" class="text-xl font-bold tracking-tight text-fg">
-        Recent Articles
-      </h2>
+  <!-- 02 · Recent Articles -->
+  <section aria-labelledby="recent-articles-heading" class="py-9">
+    <div class="flex items-baseline justify-between gap-4 mb-4">
+      <div class="flex items-baseline gap-2.5">
+        <span class="text-xs font-mono tabular-nums text-accent font-semibold" aria-hidden="true">02</span>
+        <h2 id="recent-articles-heading" class="text-xl font-bold tracking-tight text-fg">
+          Recent Writing
+        </h2>
+      </div>
       <a
         href="/articles"
-        class="inline-flex items-center gap-1 py-1 text-sm font-mono text-accent link-dashed shrink-0"
+        class="inline-flex items-center gap-1 py-1 text-xs sm:text-sm font-mono tabular-nums text-accent link-dashed shrink-0"
       >
-        <span>All Articles</span>
+        <span>All Articles ({articles.length})</span>
         <SocialIcons name="ArrowRight" class="w-4 h-4" />
       </a>
     </div>
 
-    <ul class="divide-y divide-border/70">
+    <ul class="divide-y divide-border">
       {recentArticles.map((article) => (
-        <ArticleRow article={article} showTags={false} />
+        <ArticleRow article={article} showTags={false} layout="timeline" />
       ))}
     </ul>
   </section>
 
   <hr class="border-border" />
 
-  <!-- Featured Notes, Posts & Music -->
-  <section aria-labelledby="recent-content-heading" class="py-8">
+  <!-- 03 · Notes, Posts & Music -->
+  <section aria-labelledby="recent-content-heading" class="py-9">
     <div class="flex items-baseline justify-between gap-4 mb-5">
-      <h2 id="recent-content-heading" class="text-xl font-bold tracking-tight text-fg">
-        Notes, Posts & Music
-      </h2>
+      <div class="flex items-baseline gap-2.5">
+        <span class="text-xs font-mono tabular-nums text-accent font-semibold" aria-hidden="true">03</span>
+        <h2 id="recent-content-heading" class="text-xl font-bold tracking-tight text-fg">
+          Notes, Posts & Music
+        </h2>
+      </div>
       <a
         href="/content"
-        class="inline-flex items-center gap-1 py-1 text-sm font-mono text-accent link-dashed shrink-0"
+        class="inline-flex items-center gap-1 py-1 text-xs sm:text-sm font-mono tabular-nums text-accent link-dashed shrink-0"
       >
-        <span>All Content</span>
+        <span>All Content ({creatorItems.length})</span>
         <SocialIcons name="ArrowRight" class="w-4 h-4" />
       </a>
     </div>
@@ -165,17 +174,21 @@ const personSchema = {
           href={playlist.url}
           target="_blank"
           rel="noopener noreferrer"
-          class="group flex flex-col justify-between gap-3 rounded-xl border border-border bg-surface p-4 sm:p-5 hover:border-accent/60 transition-colors"
+          class="group surface-card flex flex-col justify-between gap-3 rounded-xl p-4 sm:p-5"
         >
-          <div class="flex items-start gap-3">
-            <span class="shrink-0 mt-0.5 p-2 rounded-lg bg-accent-soft text-accent">
-              <SocialIcons name="YouTubeMusic" class="w-5 h-5" />
-            </span>
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="cat-pill cat-media">
+                <SocialIcons name="YouTubeMusic" class="w-3 h-3 shrink-0" />
+                <span>{playlist.platform}</span>
+              </span>
+              <span class="text-xs font-mono tabular-nums text-fg-muted">
+                {playlist.trackCount} tracks
+              </span>
+            </div>
+
             <div class="space-y-1">
-              <p class="text-xs font-mono uppercase tracking-wider text-accent font-medium">
-                {playlist.platform} · {playlist.trackCount} tracks
-              </p>
-              <h3 class="text-base font-semibold text-fg group-hover:text-accent transition-colors">
+              <h3 class="text-[1rem] font-semibold tracking-tight text-fg group-hover:text-accent transition-colors leading-snug">
                 {playlist.title}
               </h3>
               <p class="text-sm text-fg-muted leading-relaxed">
@@ -183,10 +196,14 @@ const personSchema = {
               </p>
             </div>
           </div>
-          <span class="inline-flex items-center gap-1 text-xs font-mono text-fg-muted group-hover:text-accent self-end">
-            <span>Open Playlist</span>
-            <SocialIcons name="ArrowUpRight" class="w-4 h-4" />
-          </span>
+
+          <div class="pt-2.5 border-t border-border flex items-center justify-between gap-2 text-xs font-mono text-fg-muted">
+            <span class="truncate">♪ {playlist.sampleTracks.slice(0, 2).join(' · ')}</span>
+            <span class="inline-flex items-center gap-1 shrink-0 group-hover:text-accent transition-colors">
+              <span>Listen</span>
+              <SocialIcons name="ArrowUpRight" class="w-3.5 h-3.5" />
+            </span>
+          </div>
         </a>
       ))}
     </div>

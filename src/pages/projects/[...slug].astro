@@ -19,6 +19,14 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await render(project);
+
+const domainPillClass: Record<ProjectEntry['data']['domain'], string> = {
+  'legal-tech': 'cat-law',
+  'erp-pos': 'cat-code',
+  'ai-tool': 'cat-media',
+  'web-app': 'cat-writing',
+  cli: 'cat-code',
+};
 ---
 
 <BaseLayout
@@ -35,16 +43,12 @@ const { Content } = await render(project);
         <span>Back to Projects</span>
       </a>
 
-      <div class="flex flex-wrap items-center gap-2 mb-2 text-xs font-mono text-fg-muted">
-        <span class="px-2 py-0.5 rounded bg-accent-soft text-accent font-medium uppercase">
+      <div class="flex flex-wrap items-center gap-2 mb-2.5 text-xs font-mono text-fg-muted">
+        <span class:list={['cat-pill uppercase', domainPillClass[project.data.domain]]}>
           {project.data.domain}
         </span>
         <span aria-hidden="true">·</span>
-        <span class="px-2 py-0.5 rounded bg-surface-muted border border-border text-fg">
-          {project.data.status}
-        </span>
-        <span aria-hidden="true">·</span>
-        <time datetime={project.data.pubDate.toISOString()} class="italic">
+        <time datetime={project.data.pubDate.toISOString()} class="tabular-nums">
           {formatDate(project.data.pubDate)}
         </time>
       </div>
@@ -73,7 +77,7 @@ const { Content } = await render(project);
             href={project.data.repoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-border bg-surface text-xs font-mono text-fg hover:border-accent hover:text-accent transition-colors"
+            class="surface-card inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-mono text-fg hover:text-accent"
           >
             <SocialIcons name="GitHub" class="w-4 h-4" />
             <span>View Source</span>
@@ -94,7 +98,7 @@ const { Content } = await render(project);
 
     <hr class="border-border" />
 
-    <div class="prose max-w-none">
+    <div class="prose">
       <Content />
     </div>
 

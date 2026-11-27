@@ -14,6 +14,13 @@ const personSchema = {
   url: `${siteOrigin}/about`,
   sameAs: SITE.socials.filter((s) => s.href.startsWith('http')).map((s) => s.href),
 };
+
+const rolePillClass: Record<string, string> = {
+  law: 'cat-law',
+  vibecoding: 'cat-code',
+  creator: 'cat-media',
+  essay: 'cat-writing',
+};
 ---
 
 <BaseLayout
@@ -26,7 +33,7 @@ const personSchema = {
       <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-fg">About</h1>
       <a
         href="/about.md"
-        class="inline-flex items-center gap-1.5 text-xs font-mono text-fg-muted hover:text-accent link-dashed"
+        class="inline-flex items-center gap-1.5 py-1 text-xs font-mono text-fg-muted hover:text-accent link-dashed"
       >
         <SocialIcons name="FileText" class="w-3.5 h-3.5" />
         <span>about.md</span>
@@ -41,10 +48,10 @@ const personSchema = {
             alt={SITE.name}
             width="220"
             height="220"
-            class="w-44 h-44 md:w-52 md:h-52 rounded-2xl object-cover border border-border"
+            class="w-44 h-44 md:w-52 md:h-52 rounded-2xl object-cover border border-border shadow-sm"
           />
         ) : (
-          <div class="w-44 h-44 md:w-52 md:h-52 rounded-xl border border-border bg-surface-muted flex flex-col items-center justify-center p-4 text-center">
+          <div class="w-44 h-44 md:w-52 md:h-52 rounded-2xl border border-border bg-surface-muted flex flex-col items-center justify-center p-4 text-center">
             <span class="font-mono text-4xl font-bold text-accent">{SITE.monogram}</span>
             <span class="font-mono text-xs text-fg-muted mt-2">{SITE.handle}</span>
             <span class="text-xs text-fg-muted mt-1">{SITE.location}</span>
@@ -52,20 +59,20 @@ const personSchema = {
         )}
       </div>
 
-      <div class="space-y-4 text-base text-fg leading-relaxed">
+      <div class="space-y-4 text-[0.975rem] text-fg leading-relaxed">
         {SITE.about.bioParagraphs.map((paragraph) => (
           <p>{paragraph}</p>
         ))}
 
-        <div class="flex flex-wrap items-center gap-4 pt-2">
+        <div class="flex flex-wrap items-center gap-2 pt-2">
           {SITE.socials.map((s) => (
             <a
               href={s.href}
               target={s.href.startsWith('http') ? '_blank' : undefined}
               rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-              class="inline-flex items-center gap-1.5 text-sm font-mono text-fg-muted hover:text-accent link-dashed"
+              class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface border border-border text-xs font-mono text-fg-muted hover:text-accent hover:border-border-strong transition-colors"
             >
-              <SocialIcons name={s.name} class="w-4 h-4" />
+              <SocialIcons name={s.name} class="w-3.5 h-3.5" />
               <span>{s.name === 'YouTubeMusic' ? 'YT Music' : s.name}</span>
             </a>
           ))}
@@ -77,21 +84,21 @@ const personSchema = {
 
     <section aria-labelledby="pillars-heading" class="space-y-4">
       <h2 id="pillars-heading" class="text-xl font-bold tracking-tight text-fg">
-        Four Hats, One Thread
+        Focus &amp; Craft
       </h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {SITE.roles.map((role) => (
           <a
             href={role.href}
-            class="group rounded-xl border border-border bg-surface p-4 hover:border-accent/60 transition-colors"
+            class="group surface-card rounded-xl p-4 space-y-2"
           >
-            <div class="flex items-center justify-between">
-              <h3 class="text-base font-semibold text-fg group-hover:text-accent transition-colors">
+            <div class="flex items-center justify-between gap-2">
+              <span class:list={['cat-pill', rolePillClass[role.key] ?? 'cat-law']}>
                 {role.label}
-              </h3>
-              <SocialIcons name="ArrowRight" class="w-4 h-4 text-fg-muted group-hover:text-accent" />
+              </span>
+              <SocialIcons name="ArrowRight" class="w-4 h-4 text-fg-muted group-hover:text-accent transition-transform group-hover:translate-x-0.5" />
             </div>
-            <p class="mt-1.5 text-sm text-fg-muted">{role.summary}</p>
+            <p class="text-sm text-fg-muted leading-relaxed">{role.summary}</p>
           </a>
         ))}
       </div>
@@ -101,10 +108,10 @@ const personSchema = {
       <h2 id="now-heading" class="text-xl font-bold tracking-tight text-fg">
         What I'm Focused On Now
       </h2>
-      <ul class="space-y-2 text-sm sm:text-base text-fg-muted">
+      <ul class="space-y-2.5 text-sm sm:text-[0.975rem] text-fg-muted">
         {SITE.about.nowItems.map((item) => (
           <li class="flex items-start gap-2.5">
-            <span class="font-mono text-accent mt-0.5">→</span>
+            <span class="font-mono text-accent mt-0.5 shrink-0">→</span>
             <span>{item}</span>
           </li>
         ))}
@@ -124,11 +131,11 @@ const personSchema = {
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {SITE.playlists.map((playlist) => (
-          <div class="rounded-xl border border-border bg-surface p-5 space-y-3 flex flex-col justify-between">
+          <div class="surface-card rounded-xl p-5 space-y-3 flex flex-col justify-between">
             <div class="space-y-2">
               <div class="flex items-center justify-between gap-2">
                 <h3 class="text-base font-bold text-fg">{playlist.title}</h3>
-                <span class="text-xs font-mono text-accent shrink-0">{playlist.trackCount} tracks</span>
+                <span class="cat-pill cat-media tabular-nums shrink-0">{playlist.trackCount} tracks</span>
               </div>
               <p class="text-xs text-fg-muted leading-relaxed">{playlist.description}</p>
               <ul class="space-y-1 pt-1 text-xs font-mono text-fg-muted">
@@ -141,7 +148,7 @@ const personSchema = {
               href={playlist.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-1 text-xs font-mono text-accent link-dashed pt-2 self-start"
+              class="inline-flex items-center gap-1 py-1 text-xs font-mono text-accent link-dashed self-start"
             >
               <span>Listen on YT Music</span>
               <SocialIcons name="ArrowUpRight" class="w-3.5 h-3.5" />
@@ -151,9 +158,9 @@ const personSchema = {
       </div>
     </section>
 
-    <section class="rounded-xl border border-border bg-surface p-5 space-y-2">
+    <section class="surface-card rounded-xl p-5 space-y-2">
       <p class="text-xs font-mono uppercase tracking-wider text-accent font-semibold">
-        Agent & Reader Friendly
+        Agent &amp; Reader Friendly
       </p>
       <p class="text-sm text-fg-muted leading-relaxed">
         Every article and core page exposes a clean Markdown mirror. Explore{' '}

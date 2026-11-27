@@ -1,59 +1,91 @@
 ---
 import { CATEGORIES } from '../config/site';
 import { type ArticleEntry, formatDate, getReadingTime, slugifyTag } from '../utils/content';
-import SocialIcons from './SocialIcons.astro';
 
 interface Props {
   article: ArticleEntry;
   showTags?: boolean;
+  layout?: 'timeline' | 'compact';
+  headingLevel?: 'h3' | 'h4';
 }
 
-const { article, showTags = false } = Astro.props;
+const { article, showTags = false, layout = 'timeline', headingLevel = 'h3' } = Astro.props;
+const HeadingTag = headingLevel;
 const readingTime = getReadingTime(article.body);
 const categoryMeta = CATEGORIES[article.data.category];
+
+const categoryClassMap: Record<keyof typeof CATEGORIES, string> = {
+  law: 'cat-law',
+  vibecoding: 'cat-code',
+  creator: 'cat-media',
+  essay: 'cat-writing',
+};
 ---
 
-<li class="group py-4 first:pt-2" data-article-item data-category={article.data.category}>
-  <article class="space-y-1.5">
-    <div class="flex flex-wrap items-baseline justify-between gap-2">
-      <a
-        href={`/articles/${article.id}`}
-        transition:name={`article-title-${article.id}`}
-        class="text-lg font-semibold text-accent hover:underline decoration-dashed underline-offset-4 leading-snug"
+<li
+  class="group py-3.5 px-3 -mx-3 rounded-xl hover:bg-surface/80 transition-colors"
+  data-article-item
+  data-category={article.data.category}
+>
+  <article
+    class:list={[
+      layout === 'timeline'
+        ? 'flex flex-col sm:grid sm:grid-cols-[108px_1fr] sm:items-baseline gap-1.5 sm:gap-5'
+        : 'space-y-1.5',
+    ]}
+  >
+    {layout === 'timeline' && (
+      <time
+        datetime={article.data.pubDate.toISOString()}
+        class="text-xs font-mono tabular-nums text-fg-muted shrink-0"
       >
-        {article.data.title}
-      </a>
-    </div>
-
-    <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-mono text-fg-muted">
-      <span class="inline-flex items-center gap-1.5 italic">
-        <SocialIcons name="Calendar" class="w-3.5 h-3.5 opacity-80" />
-        <time datetime={article.data.pubDate.toISOString()}>
-          {formatDate(article.data.pubDate)}
-        </time>
-      </span>
-      <span aria-hidden="true">·</span>
-      <span>{readingTime}</span>
-      <span aria-hidden="true">·</span>
-      <span>{categoryMeta.label}</span>
-    </div>
-
-    <p class="text-sm text-fg-muted leading-relaxed pt-0.5">
-      {article.data.description}
-    </p>
-
-    {showTags && article.data.tags.length > 0 && (
-      <div class="flex flex-wrap gap-x-3 gap-y-1 pt-1">
-        {article.data.tags.map((tag) => (
-          <a
-            href={`/tags/${slugifyTag(tag)}`}
-            class="inline-flex items-center gap-0.5 text-xs font-mono text-fg-muted hover:text-accent link-dashed"
-          >
-            <span>#</span>
-            <span>{tag}</span>
-          </a>
-        ))}
-      </div>
+        {formatDate(article.data.pubDate)}
+      </time>
     )}
+
+    <div class="space-y-1.5 min-w-0">
+      <div class="flex flex-wrap items-center gap-2 text-xs font-mono text-fg-muted">
+        {layout === 'compact' && (
+          <>
+            <time datetime={article.data.pubDate.toISOString()} class="tabular-nums">
+              {formatDate(article.data.pubDate)}
+            </time>
+            <span aria-hidden="true">·</span>
+          </>
+        )}
+        <span class:list={['cat-pill', categoryClassMap[article.data.category]]}>
+          {categoryMeta.label}
+        </span>
+        <span class="tabular-nums">{readingTime}</span>
+      </div>
+
+      <HeadingTag class="text-[1.0625rem] font-semibold tracking-tight leading-snug">
+        <a
+          href={`/articles/${article.id}`}
+          transition:name={`article-title-${article.id}`}
+          class="text-fg group-hover:text-accent hover:underline decoration-dashed underline-offset-4 transition-colors"
+        >
+          {article.data.title}
+        </a>
+      </HeadingTag>
+
+      <p class="text-sm text-fg-muted leading-relaxed">
+        {article.data.description}
+      </p>
+
+      {showTags && article.data.tags.length > 0 && (
+        <div class="flex flex-wrap gap-x-3 gap-y-1 pt-1">
+          {article.data.tags.map((tag) => (
+            <a
+              href={`/tags/${slugifyTag(tag)}`}
+              class="inline-flex items-center gap-0.5 text-xs font-mono text-fg-muted hover:text-accent link-dashed"
+            >
+              <span>#</span>
+              <span>{tag}</span>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
   </article>
 </li>

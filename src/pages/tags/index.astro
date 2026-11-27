@@ -34,11 +34,11 @@ const tags = collectTags(articles, projects, creator);
         <li>
           <a
             href={`/tags/${tag.slug}`}
-            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface text-sm font-mono text-fg hover:border-accent hover:text-accent transition-colors"
+            class="surface-card inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-mono text-fg hover:text-accent"
           >
             <span class="text-accent">#</span>
             <span>{tag.label}</span>
-            <span class="text-xs text-fg-muted">({tag.count})</span>
+            <span class="text-xs tabular-nums text-fg-muted">({tag.count})</span>
           </a>
         </li>
       ))}

@@ -9,115 +9,120 @@ const isActive = (href: string) => {
 };
 ---
 
-<header class="w-full max-w-3xl mx-auto px-4 sm:px-6">
-  <a
-    href="#main-content"
-    class="sr-only focus:not-sr-only focus:inline-block focus:mt-2 focus:px-3 focus:py-1.5 focus:rounded-md focus:bg-accent focus:text-accent-fg text-sm font-medium"
-  >
-    Skip to content
-  </a>
-
-  <div class="flex items-center justify-between py-5 sm:py-6 gap-2 sm:gap-4">
+<header class="sticky top-0 z-40 w-full bg-bg/85 backdrop-blur-md border-b border-border">
+  <div class="w-full max-w-3xl mx-auto px-4 sm:px-6">
     <a
-      href="/"
-      class="min-w-0 flex items-center gap-2 sm:gap-2.5 text-base sm:text-xl font-bold tracking-tight text-fg hover:text-accent transition-colors"
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:inline-block focus:mt-2 focus:px-3 focus:py-1.5 focus:rounded-md focus:bg-accent focus:text-accent-fg text-sm font-medium"
     >
-      <span
-        class="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-md bg-accent-soft text-accent font-mono text-xs font-bold border border-border"
-        aria-hidden="true"
-      >
-        {SITE.monogram}
-      </span>
-      <span class="truncate">{SITE.name}</span>
+      Skip to content
     </a>
 
-    <div class="flex items-center gap-0.5 sm:gap-2 shrink-0">
-      <nav aria-label="Primary" class="hidden sm:flex items-center gap-5 mr-2">
-        {SITE.nav.map((item) => (
-          <a
-            href={item.href}
-            aria-current={isActive(item.href) ? 'page' : undefined}
-            class:list={[
-              'py-1.5 text-sm font-medium transition-colors hover:text-accent',
-              isActive(item.href) ? 'active-nav text-fg' : 'text-fg-muted',
-            ]}
-          >
-            {item.label}
-          </a>
-        ))}
-      </nav>
-
+    <div class="flex items-center justify-between py-3.5 sm:py-4 gap-2 sm:gap-4">
       <a
-        href="/search"
-        aria-label="Search site"
-        title="Search (Press / or ⌘K)"
-        class:list={[
-          'p-2 rounded-lg transition-colors hover:text-accent hover:bg-surface-muted',
-          isActive('/search') ? 'text-accent bg-surface-muted' : 'text-fg-muted',
-        ]}
+        href="/"
+        class="min-w-0 flex items-center gap-2 sm:gap-2.5 text-base sm:text-lg font-bold tracking-tight text-fg hover:text-accent transition-colors"
       >
-        <SocialIcons name="Search" class="w-[18px] h-[18px]" />
+        <span
+          class="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-lg bg-accent-soft text-accent font-mono text-xs font-bold border border-border"
+          aria-hidden="true"
+        >
+          {SITE.monogram}
+        </span>
+        <span class="truncate">{SITE.name}</span>
       </a>
 
-      <button
-        id="theme-btn"
-        type="button"
-        aria-label="Toggle light and dark theme"
-        title="Toggle light & dark theme"
-        class="p-2 rounded-lg text-fg-muted hover:text-accent hover:bg-surface-muted transition-colors cursor-pointer"
-      >
-        <span class="block dark-only">
-          <SocialIcons name="Sun" class="w-[18px] h-[18px]" />
-        </span>
-        <span class="block light-only">
-          <SocialIcons name="Moon" class="w-[18px] h-[18px]" />
-        </span>
-      </button>
+      <div class="flex items-center gap-1 sm:gap-2 shrink-0">
+        <nav aria-label="Primary" class="hidden sm:flex items-center gap-5 mr-2">
+          {SITE.nav.map((item) => (
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class:list={[
+                'py-1.5 text-sm font-medium transition-colors hover:text-accent',
+                isActive(item.href) ? 'active-nav text-fg font-semibold' : 'text-fg-muted',
+              ]}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
 
-      <button
-        id="mobile-menu-btn"
-        type="button"
-        aria-expanded="false"
-        aria-controls="mobile-nav"
-        aria-label="Toggle navigation menu"
-        class="sm:hidden p-2 rounded-lg text-fg-muted hover:text-accent hover:bg-surface-muted transition-colors cursor-pointer"
-      >
-        <span id="icon-menu-open">
-          <SocialIcons name="Menu" class="w-5 h-5" />
-        </span>
-        <span id="icon-menu-close" class="hidden">
-          <SocialIcons name="Close" class="w-5 h-5" />
-        </span>
-      </button>
+        <a
+          href="/search"
+          aria-label="Search site"
+          title="Search (Press / or ⌘K)"
+          class:list={[
+            'inline-flex items-center gap-1.5 px-2 py-1.5 rounded-lg border transition-colors',
+            isActive('/search')
+              ? 'text-accent bg-surface border-border-strong'
+              : 'text-fg-muted border-transparent hover:text-fg hover:bg-surface-muted',
+          ]}
+        >
+          <SocialIcons name="Search" class="w-[17px] h-[17px]" />
+          <kbd class="hidden md:inline-block text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface-muted border border-border text-fg-muted leading-none">
+            ⌘K
+          </kbd>
+        </a>
+
+        <button
+          id="theme-btn"
+          type="button"
+          aria-label="Toggle light and dark theme"
+          title="Toggle light & dark theme"
+          class="p-2 rounded-lg text-fg-muted hover:text-fg hover:bg-surface-muted transition-colors cursor-pointer"
+        >
+          <span class="block dark-only">
+            <SocialIcons name="Sun" class="w-[18px] h-[18px]" />
+          </span>
+          <span class="block light-only">
+            <SocialIcons name="Moon" class="w-[18px] h-[18px]" />
+          </span>
+        </button>
+
+        <button
+          id="mobile-menu-btn"
+          type="button"
+          aria-expanded="false"
+          aria-controls="mobile-nav"
+          aria-label="Toggle navigation menu"
+          class="sm:hidden p-2 rounded-lg text-fg-muted hover:text-fg hover:bg-surface-muted transition-colors cursor-pointer"
+        >
+          <span id="icon-menu-open">
+            <SocialIcons name="Menu" class="w-5 h-5" />
+          </span>
+          <span id="icon-menu-close" class="hidden">
+            <SocialIcons name="Close" class="w-5 h-5" />
+          </span>
+        </button>
+      </div>
     </div>
+
+    <nav
+      id="mobile-nav"
+      aria-label="Mobile Navigation"
+      class="hidden sm:hidden pb-4 pt-2 border-t border-border"
+    >
+      <ul class="grid grid-cols-2 gap-1.5">
+        {SITE.nav.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+              class:list={[
+                'block px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+                isActive(item.href)
+                  ? 'bg-accent-soft text-accent font-semibold'
+                  : 'text-fg-muted hover:bg-surface-muted hover:text-fg',
+              ]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
   </div>
-
-  <nav
-    id="mobile-nav"
-    aria-label="Mobile Navigation"
-    class="hidden sm:hidden pb-5 pt-2 border-t border-border/70"
-  >
-    <ul class="grid grid-cols-2 gap-2">
-      {SITE.nav.map((item) => (
-        <li>
-          <a
-            href={item.href}
-            aria-current={isActive(item.href) ? 'page' : undefined}
-            class:list={[
-              'block px-3 py-2 rounded-lg text-sm font-medium transition-colors',
-              isActive(item.href)
-                ? 'bg-accent-soft text-accent font-semibold'
-                : 'text-fg-muted hover:bg-surface-muted hover:text-fg',
-            ]}
-          >
-            {item.label}
-          </a>
-        </li>
-      ))}
-    </ul>
-  </nav>
-
-  <hr class="border-border" />
 </header>
 
 <style>

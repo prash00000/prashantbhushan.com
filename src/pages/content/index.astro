@@ -7,7 +7,7 @@ import { getSortedCreatorItems } from '../../utils/content';
 const items = await getSortedCreatorItems();
 
 const platforms = [
-  { key: 'all', label: 'All' },
+  { key: 'all', label: `All (${items.length})` },
   { key: 'substack', label: 'Substack' },
   { key: 'thread', label: 'X Posts' },
   { key: 'playlist', label: 'YT Music' },
@@ -19,25 +19,20 @@ const platforms = [
   description={`Substack notes, X posts, and YouTube Music curation by ${SITE.name}`}
 >
   <section class="space-y-6">
-    <div class="space-y-2">
+    <div class="space-y-1.5">
       <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-fg">Notes, Posts & Music</h1>
       <p class="text-sm sm:text-base text-fg-muted">
-        High Court commentary on Substack, quick takes on X (@Embargoliving), and curated music on YouTube Music.
+        High Court commentary on Substack, quick takes on X (@Embargoliving), and curated playlists on YouTube Music.
       </p>
     </div>
 
-    <div class="flex flex-wrap gap-2" role="group" aria-label="Filter content by platform">
+    <div class="segmented-track" role="group" aria-label="Filter content by platform">
       {platforms.map((platform, idx) => (
         <button
           type="button"
           data-platform-filter={platform.key}
           aria-pressed={idx === 0 ? 'true' : 'false'}
-          class:list={[
-            'px-3 py-1.5 rounded-lg border text-xs font-mono transition-colors cursor-pointer',
-            idx === 0
-              ? 'bg-accent text-accent-fg border-accent'
-              : 'bg-surface border-border text-fg-muted hover:border-accent hover:text-fg',
-          ]}
+          class="segmented-item tabular-nums"
         >
           {platform.label}
         </button>
@@ -70,11 +65,7 @@ const platforms = [
       btn.addEventListener('click', () => {
         const selected = btn.dataset.platformFilter || 'all';
         buttons.forEach((b) => {
-          const active = b === btn;
-          b.setAttribute('aria-pressed', String(active));
-          b.className = active
-            ? 'px-3 py-1.5 rounded-lg border text-xs font-mono transition-colors cursor-pointer bg-accent text-accent-fg border-accent'
-            : 'px-3 py-1.5 rounded-lg border text-xs font-mono transition-colors cursor-pointer bg-surface border-border text-fg-muted hover:border-accent hover:text-fg';
+          b.setAttribute('aria-pressed', String(b === btn));
         });
 
         let visible = 0;

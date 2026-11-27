@@ -31,7 +31,7 @@ import { SITE } from '../config/site';
         />
       </div>
 
-      <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Filter search by type">
+      <div class="segmented-track" role="group" aria-label="Filter search by type">
         {[
           { key: 'all', label: 'All' },
           { key: 'article', label: 'Articles' },
@@ -43,12 +43,7 @@ import { SITE } from '../config/site';
             type="button"
             data-search-type={kind.key}
             aria-pressed={idx === 0 ? 'true' : 'false'}
-            class:list={[
-              'px-3 py-1 rounded-lg border text-xs font-mono transition-colors cursor-pointer',
-              idx === 0
-                ? 'bg-accent text-accent-fg border-accent'
-                : 'bg-surface border-border text-fg-muted hover:border-accent hover:text-fg',
-            ]}
+            class="segmented-item"
           >
             {kind.label}
           </button>
@@ -115,19 +110,26 @@ import { SITE } from '../config/site';
 
       for (const item of filtered) {
         const li = document.createElement('li');
-        li.className = 'py-4';
+        li.className = 'py-3.5 px-3 -mx-3 rounded-xl hover:bg-surface/80 transition-colors';
 
         const meta = document.createElement('div');
-        meta.className = 'flex flex-wrap items-center gap-2 text-xs font-mono text-fg-muted mb-1';
+        meta.className = 'flex flex-wrap items-center gap-2 text-xs font-mono text-fg-muted mb-1.5';
+
+        const pillMap: Record<SearchItem['type'], string> = {
+          article: 'cat-law',
+          project: 'cat-code',
+          content: 'cat-media',
+          page: 'cat-writing',
+        };
 
         const badge = document.createElement('span');
-        badge.className = 'px-2 py-0.5 rounded bg-accent-soft text-accent font-medium';
+        badge.className = `cat-pill ${pillMap[item.type]}`;
         badge.textContent = item.badge;
         meta.appendChild(badge);
 
         if (item.date) {
           const dateSpan = document.createElement('span');
-          dateSpan.className = 'italic';
+          dateSpan.className = 'tabular-nums';
           dateSpan.textContent = item.date;
           meta.appendChild(dateSpan);
         }
@@ -135,7 +137,7 @@ import { SITE } from '../config/site';
         const link = document.createElement('a');
         link.href = item.url;
         link.className =
-          'text-base sm:text-lg font-semibold text-accent hover:underline decoration-dashed underline-offset-4';
+          'text-base sm:text-[1.0625rem] font-semibold tracking-tight text-fg hover:text-accent hover:underline decoration-dashed underline-offset-4 transition-colors';
         if (item.url.startsWith('http')) {
           link.target = '_blank';
           link.rel = 'noopener noreferrer';
@@ -181,11 +183,7 @@ import { SITE } from '../config/site';
       btn.addEventListener('click', () => {
         activeType = btn.dataset.searchType || 'all';
         typeBtns.forEach((b) => {
-          const isSelected = b === btn;
-          b.setAttribute('aria-pressed', String(isSelected));
-          b.className = isSelected
-            ? 'px-3 py-1 rounded-lg border text-xs font-mono transition-colors cursor-pointer bg-accent text-accent-fg border-accent'
-            : 'px-3 py-1 rounded-lg border text-xs font-mono transition-colors cursor-pointer bg-surface border-border text-fg-muted hover:border-accent hover:text-fg';
+          b.setAttribute('aria-pressed', String(b === btn));
         });
         render();
       });
