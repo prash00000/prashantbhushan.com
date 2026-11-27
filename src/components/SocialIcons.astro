@@ -3,9 +3,9 @@ export type IconName =
   | 'GitHub'
   | 'X'
   | 'LinkedIn'
-  | 'YouTube'
+  | 'YouTubeMusic'
+  | 'Substack'
   | 'Email'
-  | 'Spotify'
   | 'Instagram'
   | 'RSS'
   | 'Search'
@@ -49,24 +49,24 @@ const { name, class: className = 'w-5 h-5' } = Astro.props;
     <path d="M16 16v-3a2 2 0 0 0 -4 0" />
   </svg>
 )}
-{name === 'YouTube' && (
+{name === 'YouTubeMusic' && (
   <svg class={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M2 8a4 4 0 0 1 4 -4h12a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-12a4 4 0 0 1 -4 -4v-8z" />
-    <path d="M10 9l5 3l-5 3z" />
+    <circle cx="12" cy="12" r="9" />
+    <circle cx="12" cy="12" r="5" />
+    <path d="M10.5 9.75l4 2.25l-4 2.25z" />
+  </svg>
+)}
+{name === 'Substack' && (
+  <svg class={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M4 5h16" />
+    <path d="M4 9h16" />
+    <path d="M4 13h16v7l-8 -4l-8 4z" />
   </svg>
 )}
 {name === 'Email' && (
   <svg class={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
     <path d="M3 7l9 6l9 -6" />
-  </svg>
-)}
-{name === 'Spotify' && (
-  <svg class={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-    <path d="M8 11.973c2.5 -1.473 5.5 -.973 7.5 .527" />
-    <path d="M9 15c1.5 -1 4 -1 5 .5" />
-    <path d="M7 9c2 -1 6 -2 10 .5" />
   </svg>
 )}
 {name === 'Instagram' && (

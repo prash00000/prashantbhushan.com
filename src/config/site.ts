@@ -1,5 +1,5 @@
 export interface SocialLink {
-  name: 'GitHub' | 'X' | 'LinkedIn' | 'YouTube' | 'Email' | 'Spotify' | 'Instagram';
+  name: 'GitHub' | 'X' | 'LinkedIn' | 'YouTubeMusic' | 'Substack' | 'Instagram' | 'Email';
   href: string;
   label: string;
 }
@@ -85,12 +85,12 @@ export const SITE = {
   ],
   socials: [
     { name: 'GitHub', href: 'https://github.com/prash00000', label: 'GitHub' },
-    { name: 'X', href: 'https://x.com/prashantbasthana', label: 'X (Twitter)' },
-    { name: 'LinkedIn', href: 'https://linkedin.com/in/prashantbasthana', label: 'LinkedIn' },
-    { name: 'YouTube', href: 'https://youtube.com/@prashantbasthana', label: 'YouTube' },
+    { name: 'X', href: 'https://x.com/Embargoliving', label: 'X (Twitter)' },
+    { name: 'LinkedIn', href: 'https://www.linkedin.com/in/prashant-bhushan-law/', label: 'LinkedIn' },
+    { name: 'YouTubeMusic', href: 'https://music.youtube.com/playlist?list=PLWxPb8fPIedU', label: 'YouTube Music' },
+    { name: 'Substack', href: 'https://substack.com/@prashantbasthana', label: 'Substack' },
     { name: 'Instagram', href: 'https://instagram.com/prashantbasthana', label: 'Instagram' },
-    { name: 'Spotify', href: 'https://open.spotify.com/user/prashantbasthana', label: 'Spotify' },
-    { name: 'Email', href: 'mailto:hello@prashantbasthana.com', label: 'Email' },
+    { name: 'Email', href: 'mailto:officeofprashantbhushan@gmail.com', label: 'Email' },
   ] satisfies SocialLink[],
   newsletter: {
     heading: 'Dispatches',
@@ -105,7 +105,7 @@ export const SITE = {
       'I advise startups, indie builders, and creator-led businesses on technology contracts, intellectual property, privacy compliance, and AI product risk — grounded in hands-on experience writing and shipping code.',
     disclaimer:
       'Disclaimer: Everything published on this website is for informational and educational purposes only. It does not constitute legal advice, nor does viewing or contacting through this site create an attorney-client relationship.',
-    contactEmail: 'mailto:hello@prashantbasthana.com?subject=Advisory%20Inquiry',
+    contactEmail: 'mailto:officeofprashantbhushan@gmail.com?subject=Advisory%20Inquiry',
     areas: [
       {
         title: 'AI & Product Risk Advisory',

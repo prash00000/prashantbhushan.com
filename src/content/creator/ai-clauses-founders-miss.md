@@ -3,7 +3,7 @@ title: "7 Clauses Every AI Founder Should Read Twice Before Launching"
 description: "Practical thread breaking down training data rights, model indemnification, output ownership, and telemetry traps."
 pubDate: 2026-10-28
 platform: thread
-url: "https://x.com/prashantbasthana"
+url: "https://x.com/Embargoliving"
 durationOrFormat: "12 parts"
 tags:
   - law

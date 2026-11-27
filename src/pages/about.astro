@@ -66,7 +66,7 @@ const personSchema = {
               class="inline-flex items-center gap-1.5 text-sm font-mono text-fg-muted hover:text-accent link-dashed"
             >
               <SocialIcons name={s.name} class="w-4 h-4" />
-              <span>{s.name}</span>
+              <span>{s.name === 'YouTubeMusic' ? 'YT Music' : s.name}</span>
             </a>
           ))}
         </div>
