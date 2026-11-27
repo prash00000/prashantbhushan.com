@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 
 const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : process.env.SITE_URL || 'https://prashantbhushan.com';
+  : process.env.SITE_URL || 'https://prashantbhushancom.vercel.app';
 
 export default defineConfig({
   site: siteUrl,

@@ -11,9 +11,11 @@ const { item, headingLevel = 'h3' } = Astro.props;
 const HeadingTag = headingLevel;
 
 const platformLabels: Record<CreatorEntry['data']['platform'], string> = {
+  substack: 'Substack',
+  thread: 'X Post',
+  playlist: 'YT Music',
   youtube: 'YouTube',
   podcast: 'Podcast',
-  thread: 'X Thread',
   talk: 'Talk',
 };
 ---

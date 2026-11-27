@@ -41,7 +41,7 @@ const personSchema = {
             alt={SITE.name}
             width="220"
             height="220"
-            class="w-44 h-44 md:w-52 md:h-52 rounded-xl object-cover border border-border"
+            class="w-44 h-44 md:w-52 md:h-52 rounded-full object-cover border border-border"
           />
         ) : (
           <div class="w-44 h-44 md:w-52 md:h-52 rounded-xl border border-border bg-surface-muted flex flex-col items-center justify-center p-4 text-center">
@@ -107,6 +107,34 @@ const personSchema = {
             <span class="font-mono text-accent mt-0.5">→</span>
             <span>{item}</span>
           </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="music-heading" class="rounded-xl border border-border bg-surface p-5 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <SocialIcons name="YouTubeMusic" class="w-5 h-5 text-accent" />
+          <h2 id="music-heading" class="text-base font-bold text-fg">
+            On Rotation · {SITE.music.title}
+          </h2>
+        </div>
+        <a
+          href={SITE.music.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1 text-xs font-mono text-accent link-dashed"
+        >
+          <span>{SITE.music.trackCount} tracks on YT Music</span>
+          <SocialIcons name="ArrowUpRight" class="w-3.5 h-3.5" />
+        </a>
+      </div>
+      <p class="text-sm text-fg-muted">
+        {SITE.music.description} Curated under <span class="font-mono text-fg">{SITE.music.curator}</span>.
+      </p>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1 text-xs font-mono text-fg-muted">
+        {SITE.music.sampleTracks.map((track) => (
+          <li class="truncate">♪ {track}</li>
         ))}
       </ul>
     </section>

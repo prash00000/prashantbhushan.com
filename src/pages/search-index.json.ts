@@ -56,7 +56,7 @@ export const GET: APIRoute = async () => {
       url: '/about',
       type: 'page' as const,
       badge: 'Page',
-      tags: ['bio', 'lawyer', 'vibe coder', 'creator'],
+      tags: ['bio', 'lawyer', 'litigation', 'vibe coder', 'substack', 'youtube music'],
     },
   ];
 

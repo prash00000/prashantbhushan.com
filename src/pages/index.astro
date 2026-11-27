@@ -48,7 +48,7 @@ const personSchema = {
             alt={SITE.name}
             width="96"
             height="96"
-            class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border border-border group-hover:border-accent transition-colors"
+            class="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border border-border group-hover:border-accent transition-colors"
           />
         </a>
       )}
@@ -138,11 +138,11 @@ const personSchema = {
 
   <hr class="border-border" />
 
-  <!-- Featured Content Creation -->
+  <!-- Featured Notes, Posts & Music -->
   <section aria-labelledby="recent-content-heading" class="py-8">
     <div class="flex items-baseline justify-between gap-4 mb-5">
       <h2 id="recent-content-heading" class="text-xl font-bold tracking-tight text-fg">
-        Videos, Threads & Talks
+        Notes, Posts & Music
       </h2>
       <a
         href="/content"
@@ -158,6 +158,34 @@ const personSchema = {
         <ContentCard item={item} />
       ))}
     </div>
+
+    <a
+      href={SITE.music.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 group flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-border bg-surface p-4 sm:p-5 hover:border-accent/60 transition-colors"
+    >
+      <div class="flex items-start gap-3">
+        <span class="shrink-0 mt-0.5 p-2 rounded-lg bg-accent-soft text-accent">
+          <SocialIcons name="YouTubeMusic" class="w-5 h-5" />
+        </span>
+        <div class="space-y-0.5">
+          <p class="text-xs font-mono uppercase tracking-wider text-accent font-medium">
+            {SITE.music.platform} · {SITE.music.trackCount} tracks
+          </p>
+          <h3 class="text-base font-semibold text-fg group-hover:text-accent transition-colors">
+            {SITE.music.title}
+          </h3>
+          <p class="text-sm text-fg-muted">
+            {SITE.music.description}
+          </p>
+        </div>
+      </div>
+      <span class="inline-flex items-center gap-1 text-xs font-mono text-fg-muted group-hover:text-accent shrink-0">
+        <span>Open Playlist</span>
+        <SocialIcons name="ArrowUpRight" class="w-4 h-4" />
+      </span>
+    </a>
   </section>
 
   <NewsletterBox />

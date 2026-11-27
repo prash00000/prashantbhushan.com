@@ -25,55 +25,55 @@ export interface EngagementModel {
 }
 
 export const CATEGORIES = {
-  law: { label: 'Law & Policy', short: 'Law' },
+  law: { label: 'Law & Litigation', short: 'Law' },
   vibecoding: { label: 'Vibe Coding', short: 'Code' },
-  creator: { label: 'Content Creation', short: 'Creator' },
+  creator: { label: 'Notes & Media', short: 'Media' },
   essay: { label: 'Essays', short: 'Essay' },
 } as const;
 
 export type ArticleCategory = keyof typeof CATEGORIES;
 
 /**
- * Centralized site configuration.
- * Update URLs, bio, avatar path, practice details, and newsletter endpoint here.
+ * Centralized site configuration grounded in Prashant Bhushan's profiles.
  */
 export const SITE = {
   name: 'Prashant Bhushan',
   handle: '@prashantbasthana',
+  xHandle: '@Embargoliving',
   monogram: 'PB',
-  title: 'Prashant Bhushan — Lawyer, Vibe Coder & Writer',
+  title: 'Prashant Bhushan — Lawyer, Vibe Coder & Thinker',
   description:
-    'Lawyer navigating tech and policy, vibe-coding software tools, creating content, and writing essays on law, AI, and building in public.',
-  siteUrl: 'https://prashantbhushan.com', // Production domain (overridden automatically on Vercel via VERCEL_PROJECT_PRODUCTION_URL)
-  avatarSrc: null as string | null, // Drop a photo in public/avatar.jpg and change this to '/avatar.jpg'
-  location: 'India · Remote',
-  heroGreeting: 'Lawyer, Vibe Coder & Writer.',
+    'Law, litigation & vibe coding. Building civic legal-tech (UP Civic Grievance Portal) and offline-first software (RetailFlow ERP), writing court notes on Substack and X.',
+  siteUrl: 'https://prashantbhushancom.vercel.app',
+  avatarSrc: '/avatar.jpg' as string | null,
+  location: 'Uttar Pradesh, India',
+  heroGreeting: 'Lawyer, Vibe Coder & Thinker.',
   heroTagline:
-    'Counsel for tech and AI startups. On evenings and weekends, I build legal-tech utilities and document the work in writing and video.',
+    'Law, litigation, strategy & building big. Shipping civic legal-tech and offline-first software, writing weekly notes on Substack & X, and cooking outside the terminal.',
   roles: [
     {
       key: 'law',
-      label: 'Lawyer',
+      label: 'Law & Litigation',
       href: '/practice',
-      summary: 'Tech contracts, AI governance, IP & founder advisory.',
+      summary: 'Constitutional rights, Article 21 fair-trial jurisprudence, and Uttar Pradesh civic-legal research.',
     },
     {
       key: 'vibecoding',
-      label: 'Vibe Coder',
+      label: 'Vibe Coding',
       href: '/projects',
-      summary: 'Shipping practical apps, legal-tech tools & CLI utilities.',
+      summary: 'Shipping UP Civic Grievance Portal, RetailFlow ERP (v1.4.0), and GYM-ERP.',
     },
     {
       key: 'creator',
-      label: 'Content Creator',
+      label: 'Notes & Curation',
       href: '/content',
-      summary: 'Build breakdowns, videos, threads & speaking.',
+      summary: 'Substack weekly journal, X legal commentary (@Embargoliving) & YT Music rotation.',
     },
     {
       key: 'essay',
-      label: 'Article Writer',
+      label: 'Writing',
       href: '/articles',
-      summary: 'Deep dives on law, AI workflows & modern shipping.',
+      summary: 'Essays connecting statutory frameworks, courtroom realities, and practical software.',
     },
   ] satisfies RolePillar[],
   nav: [
@@ -92,97 +92,118 @@ export const SITE = {
     { name: 'Instagram', href: 'https://instagram.com/prashantbasthana', label: 'Instagram' },
     { name: 'Email', href: 'mailto:officeofprashantbhushan@gmail.com', label: 'Email' },
   ] satisfies SocialLink[],
+  music: {
+    title: 'International Songs Only',
+    curator: 'IndieArt',
+    platform: 'YouTube Music',
+    trackCount: 320,
+    description: 'Clean A–Z English rotation (deduplicated from Spotify + YouTube Music).',
+    url: 'https://music.youtube.com/playlist?list=PLWxPb8fPIedU',
+    sampleTracks: [
+      "2035 — 14's Vibe, DAN14, KAFE14 & AKA Beats",
+      '7 Years — Lukas Graham',
+      'Adventure of a Lifetime — Coldplay',
+      'Another Love — Tom Odell',
+      'Blinding Lights — The Weeknd',
+      'Dandelions — Ruth B.',
+      'Daylight — David Kushner',
+      'Die With A Smile — Lady Gaga & Bruno Mars',
+    ],
+  },
   newsletter: {
-    heading: 'Dispatches',
+    heading: 'Weekly Journal',
     description:
-      'Occasional notes when a new essay or tool goes live. Zero spam, unsubscribe anytime.',
-    actionUrl: '', // Optional: paste your Buttondown / ConvertKit / Substack form POST URL
+      'Notes on court rulings, civil liberties, personal boundaries, and new builds — published via Substack.',
+    substackUrl: 'https://substack.com/@prashantbasthana',
+    actionUrl: '', // Optional: paste a direct form POST endpoint if desired
     placeholderEmail: 'you@domain.com',
   },
   practice: {
-    headline: 'Legal Counsel Built for Builders',
+    headline: 'Law, Litigation & Civic Tooling',
     intro:
-      'I advise startups, indie builders, and creator-led businesses on technology contracts, intellectual property, privacy compliance, and AI product risk — grounded in hands-on experience writing and shipping code.',
+      'Focused on constitutional and civil liberties research, Uttar Pradesh statutory grievance mechanisms, and software that makes complex public processes and commercial compliance simpler to navigate.',
     disclaimer:
       'Disclaimer: Everything published on this website is for informational and educational purposes only. It does not constitute legal advice, nor does viewing or contacting through this site create an attorney-client relationship.',
-    contactEmail: 'mailto:officeofprashantbhushan@gmail.com?subject=Advisory%20Inquiry',
+    contactEmail: 'mailto:officeofprashantbhushan@gmail.com?subject=Legal%20%2F%20Project%20Inquiry',
     areas: [
       {
-        title: 'AI & Product Risk Advisory',
-        tag: 'AI & Governance',
+        title: 'Constitutional & Fair-Trial Research',
+        tag: 'Law & Litigation',
         summary:
-          'Pragmatic product reviews for AI-native apps, agentic workflows, model terms, and regulatory readiness without slowing down shipping velocity.',
+          'Tracking High Court and constitutional developments around Article 21 fair-trial rights, unlawful detention, habeas corpus safeguards, and service jurisprudence.',
         deliverables: [
-          'Pre-launch AI feature & policy risk audit',
-          'Acceptable Use, AI disclosures & Terms of Service',
-          'Vendor & foundation model API compliance checks',
+          'Allahabad High Court order & statutory analysis notes',
+          'Article 21 victim-rights & detention accountability research',
+          'Structured procedural breakdowns for public readers',
         ],
       },
       {
-        title: 'SaaS & Technology Contracts',
-        tag: 'Commercial',
+        title: 'Civic Grievance & RTI Systems',
+        tag: 'Civic Tech',
         summary:
-          'Clear, plain-English commercial agreements designed to close deals faster rather than trap engineering and sales teams in redline loops.',
+          'Translating Uttar Pradesh statutory escalation ladders into accessible digital tools without collecting or storing user data.',
         deliverables: [
-          'Master Services Agreements (MSA) & SaaS Order Forms',
-          'Data Processing Agreements (DPA) & SLAs',
-          'API licensing & enterprise pilot agreements',
+          'UP Janhit Guarantee Act 2011 & Municipalities Act workflows',
+          'Zero-storage client-side RTI Form-A & petition generators',
+          'Bilingual English / Hindi legal-tech interface design',
         ],
       },
       {
-        title: 'IP, Open Source & Creator Law',
-        tag: 'IP & Media',
+        title: 'SMB GST & Commercial Ops Workflows',
+        tag: 'Tax & ERP',
         summary:
-          'Protecting software, brand assets, and content pipelines while navigating open-source licenses, contributor rights, and sponsorships.',
+          'Encoding statutory tax and accounting rules directly into offline-first software built for Indian retailers and small businesses.',
         deliverables: [
-          'OSS license hygiene & dual-licensing strategy',
-          'Creator sponsorship, licensing & talent agreements',
-          'IP assignment & founder/contractor cleanups',
+          'Regular GST & Section 10 Composition billing logic',
+          'GSTR-2B reconciliation, Section 194Q & 269ST checks',
+          'Audit-ready trial balance, P&L & ledger statements',
         ],
       },
       {
-        title: 'Privacy & Digital Compliance',
-        tag: 'Privacy',
+        title: 'Editorial & Strategy Writing',
+        tag: 'Writing',
         summary:
-          'Lightweight privacy architecture that aligns actual database and analytics telemetry with your public privacy promises.',
+          'Clear legal teardowns, engineering postmortems, and reflective weekly notes across Substack and X.',
         deliverables: [
-          'Privacy Policy & cookie consent alignment',
-          'Cross-border data transfer & subprocessor maps',
-          'User data deletion & retention workflows',
+          'Case-law and administrative accountability commentary',
+          'Open-source legal-tech & offline-first architecture notes',
+          'Long-form essays bridging policy and code',
         ],
       },
     ] satisfies PracticeArea[],
     engagements: [
       {
-        title: 'Product & Contract Sprint',
-        cadence: 'Fixed Scope · 1–2 Weeks',
+        title: 'Legal & Civic Research Collaboration',
+        cadence: 'Research · Writing',
         description:
-          'Rapid review of your app launch, terms, privacy docs, or commercial agreement templates before you ship or fundraise.',
+          'Collaborating on statutory mapping, RTI/grievance workflows, and public-interest legal-tech documentation.',
       },
       {
-        title: 'Fractional Builder Counsel',
-        cadence: 'Monthly Retainer',
+        title: 'Software & Tooling Builds',
+        cadence: 'Civic Tech · Desktop ERPs',
         description:
-          'Ongoing legal sounding board inside Slack/email for fast-moving founders shipping AI products and closing enterprise pilots.',
+          'Designing and shipping fast, offline-first TypeScript/React/Astro apps grounded in real operational constraints.',
       },
       {
-        title: 'Workshops & Speaking',
-        cadence: 'Events · Podcasts · Teams',
+        title: 'Direct Inquiries',
+        cadence: 'Email · LinkedIn',
         description:
-          'Talks and interactive sessions on legal-tech, vibe coding safely, IP in the age of generative AI, and developer-friendly compliance.',
+          'Reach out for discussions around litigation research, legal-tech projects, or writing collaborations.',
       },
     ] satisfies EngagementModel[],
   },
   about: {
     bioParagraphs: [
-      "I'm Prashant Bhushan (@prashantbasthana) — a practicing lawyer who spends evenings and weekends vibe coding software tools, documenting builds on camera, and writing long-form articles.",
-      'Too often, legal thinking and software engineering live in separate worlds. Lawyers rarely read pull requests, and builders rarely read the fine print until an enterprise deal or launch deadline forces them to. I work in the overlap between both.',
-      'On this site you will find essays dissecting technology law and AI workflows, small sharp tools I have built from scratch, and videos or threads breaking down how modern AI-assisted software gets made.',
+      "I'm Prashant Bhushan — working across law and litigation while vibe coding practical software, thinking in strategy, cooking good food, and building big.",
+      'On the legal side, I follow High Court and constitutional jurisprudence closely — from Article 21 fair-trial protections and habeas corpus accountability in Uttar Pradesh to statutory civic grievance ladders and RTI tooling.',
+      'On the software side, I build tools that solve concrete ground-level problems: the bilingual UP Civic Grievance Portal (live on Vercel) and RetailFlow ERP, an offline-first Windows desktop GST billing, inventory, and accounting app.',
+      'I publish my weekly journal on Substack (@prashantbasthana), post legal thoughts on X (@Embargoliving), and maintain a 320-track International Songs Only playlist on YouTube Music.',
     ],
     nowItems: [
-      'Advising early-stage software & AI teams on practical contracts and product risk.',
-      'Vibe coding small legal-tech utilities, CLI helpers, and developer productivity apps.',
-      'Publishing weekly breakdowns on agentic coding workflows and tech-law trends.',
+      'Tracking Allahabad High Court rulings, Article 21 jurisprudence, and civil liberties commentary.',
+      'Shipping and refining RetailFlow ERP (v1.4.0) and UP Civic Grievance Portal.',
+      'Publishing weekly journal notes on Substack (@prashantbasthana) and short commentary on X (@Embargoliving).',
+      'Cooking outside work and curating my 320-track International Songs Only playlist on YouTube Music.',
     ],
   },
 } as const;

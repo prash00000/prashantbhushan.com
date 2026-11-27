@@ -17,9 +17,21 @@ const hasLiveAction = Boolean(SITE.newsletter.actionUrl);
   aria-label="Newsletter signup"
 >
   <div class="space-y-2 mb-4">
-    <p class="text-xs font-mono uppercase tracking-wider text-accent font-semibold">
-      Newsletter
-    </p>
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <p class="text-xs font-mono uppercase tracking-wider text-accent font-semibold">
+        Substack
+      </p>
+      {SITE.newsletter.substackUrl && (
+        <a
+          href={SITE.newsletter.substackUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-xs font-mono text-fg-muted hover:text-accent link-dashed"
+        >
+          @prashantbasthana ↗
+        </a>
+      )}
+    </div>
     <h2 class="text-lg sm:text-xl font-bold text-fg">
       {SITE.newsletter.heading}
     </h2>
