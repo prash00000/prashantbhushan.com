@@ -111,32 +111,44 @@ const personSchema = {
       </ul>
     </section>
 
-    <section aria-labelledby="music-heading" class="rounded-xl border border-border bg-surface p-5 space-y-3">
+    <section aria-labelledby="music-heading" class="space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <div class="flex items-center gap-2">
           <SocialIcons name="YouTubeMusic" class="w-5 h-5 text-accent" />
-          <h2 id="music-heading" class="text-base font-bold text-fg">
-            On Rotation · {SITE.music.title}
+          <h2 id="music-heading" class="text-xl font-bold tracking-tight text-fg">
+            On Rotation · YouTube Music
           </h2>
         </div>
-        <a
-          href={SITE.music.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-1 text-xs font-mono text-accent link-dashed"
-        >
-          <span>{SITE.music.trackCount} tracks on YT Music</span>
-          <SocialIcons name="ArrowUpRight" class="w-3.5 h-3.5" />
-        </a>
+        <span class="text-xs font-mono text-fg-muted">Curated under IndieArt</span>
       </div>
-      <p class="text-sm text-fg-muted">
-        {SITE.music.description} Curated under <span class="font-mono text-fg">{SITE.music.curator}</span>.
-      </p>
-      <ul class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1 text-xs font-mono text-fg-muted">
-        {SITE.music.sampleTracks.map((track) => (
-          <li class="truncate">♪ {track}</li>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {SITE.playlists.map((playlist) => (
+          <div class="rounded-xl border border-border bg-surface p-5 space-y-3 flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <h3 class="text-base font-bold text-fg">{playlist.title}</h3>
+                <span class="text-xs font-mono text-accent shrink-0">{playlist.trackCount} tracks</span>
+              </div>
+              <p class="text-xs text-fg-muted leading-relaxed">{playlist.description}</p>
+              <ul class="space-y-1 pt-1 text-xs font-mono text-fg-muted">
+                {playlist.sampleTracks.slice(0, 5).map((track) => (
+                  <li class="truncate">♪ {track}</li>
+                ))}
+              </ul>
+            </div>
+            <a
+              href={playlist.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1 text-xs font-mono text-accent link-dashed pt-2 self-start"
+            >
+              <span>Listen on YT Music</span>
+              <SocialIcons name="ArrowUpRight" class="w-3.5 h-3.5" />
+            </a>
+          </div>
         ))}
-      </ul>
+      </div>
     </section>
 
     <section class="rounded-xl border border-border bg-surface p-5 space-y-2">

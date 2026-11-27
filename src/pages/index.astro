@@ -159,33 +159,37 @@ const personSchema = {
       ))}
     </div>
 
-    <a
-      href={SITE.music.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="mt-4 group flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-border bg-surface p-4 sm:p-5 hover:border-accent/60 transition-colors"
-    >
-      <div class="flex items-start gap-3">
-        <span class="shrink-0 mt-0.5 p-2 rounded-lg bg-accent-soft text-accent">
-          <SocialIcons name="YouTubeMusic" class="w-5 h-5" />
-        </span>
-        <div class="space-y-0.5">
-          <p class="text-xs font-mono uppercase tracking-wider text-accent font-medium">
-            {SITE.music.platform} · {SITE.music.trackCount} tracks
-          </p>
-          <h3 class="text-base font-semibold text-fg group-hover:text-accent transition-colors">
-            {SITE.music.title}
-          </h3>
-          <p class="text-sm text-fg-muted">
-            {SITE.music.description}
-          </p>
-        </div>
-      </div>
-      <span class="inline-flex items-center gap-1 text-xs font-mono text-fg-muted group-hover:text-accent shrink-0">
-        <span>Open Playlist</span>
-        <SocialIcons name="ArrowUpRight" class="w-4 h-4" />
-      </span>
-    </a>
+    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {SITE.playlists.map((playlist) => (
+        <a
+          href={playlist.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group flex flex-col justify-between gap-3 rounded-xl border border-border bg-surface p-4 sm:p-5 hover:border-accent/60 transition-colors"
+        >
+          <div class="flex items-start gap-3">
+            <span class="shrink-0 mt-0.5 p-2 rounded-lg bg-accent-soft text-accent">
+              <SocialIcons name="YouTubeMusic" class="w-5 h-5" />
+            </span>
+            <div class="space-y-1">
+              <p class="text-xs font-mono uppercase tracking-wider text-accent font-medium">
+                {playlist.platform} · {playlist.trackCount} tracks
+              </p>
+              <h3 class="text-base font-semibold text-fg group-hover:text-accent transition-colors">
+                {playlist.title}
+              </h3>
+              <p class="text-sm text-fg-muted leading-relaxed">
+                {playlist.description}
+              </p>
+            </div>
+          </div>
+          <span class="inline-flex items-center gap-1 text-xs font-mono text-fg-muted group-hover:text-accent self-end">
+            <span>Open Playlist</span>
+            <SocialIcons name="ArrowUpRight" class="w-4 h-4" />
+          </span>
+        </a>
+      ))}
+    </div>
   </section>
 
   <NewsletterBox />
