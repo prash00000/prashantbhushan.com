@@ -24,6 +24,16 @@ export interface EngagementModel {
   description: string;
 }
 
+export interface PlaylistItem {
+  title: string;
+  curator: string;
+  platform: 'YouTube Music' | 'Spotify';
+  trackCount: number;
+  description: string;
+  url: string;
+  sampleTracks: string[];
+}
+
 export const CATEGORIES = {
   law: { label: 'Law & Litigation', short: 'Law' },
   vibecoding: { label: 'Vibe Coding', short: 'Code' },
@@ -129,7 +139,7 @@ export const SITE = {
         'Mere Bina (Unplugged) - KK',
       ],
     },
-  ],
+  ] satisfies PlaylistItem[],
   newsletter: {
     heading: 'Weekly Journal',
     description:
