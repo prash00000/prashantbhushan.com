@@ -21,15 +21,15 @@ const isActive = (href: string) => {
     <div class="flex items-center justify-between py-3.5 sm:py-4 gap-2 sm:gap-4">
       <a
         href="/"
-        class="min-w-0 flex items-center gap-2 sm:gap-2.5 text-base sm:text-lg font-bold tracking-tight text-fg hover:text-accent transition-colors"
+        class="min-w-0 flex items-center gap-2.5 text-base sm:text-lg font-semibold tracking-tight text-fg hover:text-accent transition-colors"
       >
         <span
-          class="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-lg bg-accent-soft text-accent font-mono text-xs font-bold border border-border"
+          class="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-md bg-fg text-bg font-sans text-xs font-bold tracking-tight"
           aria-hidden="true"
         >
           {SITE.monogram}
         </span>
-        <span class="truncate">{SITE.name}</span>
+        <span class="truncate font-serif font-semibold">{SITE.name}</span>
       </a>
 
       <div class="flex items-center gap-1 sm:gap-2 shrink-0">
@@ -51,18 +51,15 @@ const isActive = (href: string) => {
         <a
           href="/search"
           aria-label="Search site"
-          title="Search (Press / or ⌘K)"
+          title="Search (Press / or Ctrl+K)"
           class:list={[
-            'inline-flex items-center gap-1.5 px-2 py-1.5 rounded-lg border transition-colors',
+            'inline-flex items-center justify-center p-2 rounded-lg transition-colors',
             isActive('/search')
-              ? 'text-accent bg-surface border-border-strong'
-              : 'text-fg-muted border-transparent hover:text-fg hover:bg-surface-muted',
+              ? 'text-accent bg-surface border border-border'
+              : 'text-fg-muted hover:text-fg hover:bg-surface-muted',
           ]}
         >
-          <SocialIcons name="Search" class="w-[17px] h-[17px]" />
-          <kbd class="hidden md:inline-block text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface-muted border border-border text-fg-muted leading-none">
-            ⌘K
-          </kbd>
+          <SocialIcons name="Search" class="w-[18px] h-[18px]" />
         </a>
 
         <button

@@ -1,6 +1,6 @@
 ---
 title: "Article 21 Belongs to the Victim Too: Delay, Fair Trial, and Accountability"
-description: "Why fair-trial jurisprudence cannot ignore the hardship a long, distant trial inflicts on victims — and why station CCTV records matter in habeas corpus review."
+description: "Why fair-trial jurisprudence cannot ignore the hardship a long, distant trial inflicts on victims, and why station CCTV records matter in habeas corpus review."
 pubDate: 2026-11-25
 category: law
 tags:

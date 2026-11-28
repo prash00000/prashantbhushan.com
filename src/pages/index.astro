@@ -34,9 +34,9 @@ const personSchema = {
 ---
 
 <BaseLayout title={SITE.title} description={SITE.description} structuredData={personSchema}>
-  <!-- Hero -->
-  <section id="hero" class="pt-2 pb-10">
-    <div class="flex flex-col sm:flex-row sm:items-start gap-5 sm:gap-6">
+  <!-- Hero Masthead -->
+  <section id="hero" class="pt-4 pb-9">
+    <div class="flex flex-col sm:flex-row sm:items-start gap-5 sm:gap-7">
       {SITE.avatarSrc && (
         <a
           href="/about"
@@ -48,21 +48,21 @@ const personSchema = {
             alt={SITE.name}
             width="96"
             height="96"
-            class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border border-border shadow-xs group-hover:border-border-strong transition-colors"
+            class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border border-border group-hover:border-border-strong transition-colors"
           />
         </a>
       )}
 
-      <div class="space-y-4 min-w-0">
-        <h1 class="text-[clamp(1.5rem,1.25rem+1.2vw,2rem)] font-bold tracking-tight text-fg leading-tight">
+      <div class="space-y-3 min-w-0">
+        <h1 class="font-serif text-[clamp(1.75rem,1.45rem+1.3vw,2.25rem)] font-semibold tracking-tight text-fg leading-[1.15]">
           {SITE.heroGreeting}
         </h1>
 
-        <p class="text-[0.975rem] text-fg-muted leading-relaxed max-w-2xl">
+        <p class="text-[0.985rem] text-fg-muted leading-relaxed max-w-[60ch]">
           {SITE.heroTagline}
         </p>
 
-        <div class="flex flex-wrap items-center gap-2 pt-0.5">
+        <nav aria-label="Social links" class="flex flex-wrap items-center gap-2 pt-1">
           {SITE.socials.map((s) => (
             <a
               href={s.href}
@@ -70,7 +70,7 @@ const personSchema = {
               rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
               aria-label={s.label}
               title={s.label}
-              class="inline-flex items-center justify-center p-2 rounded-lg bg-surface border border-border text-fg-muted hover:text-accent hover:border-border-strong transition-colors"
+              class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-surface border border-border text-fg-muted hover:text-accent hover:border-border-strong transition-colors"
             >
               <SocialIcons name={s.name} class="w-[18px] h-[18px]" />
             </a>
@@ -79,58 +79,79 @@ const personSchema = {
             href="/rss.xml"
             aria-label="Subscribe via RSS"
             title="RSS Feed"
-            class="inline-flex items-center justify-center p-2 rounded-lg bg-surface border border-border text-fg-muted hover:text-accent hover:border-border-strong transition-colors"
+            class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-surface border border-border text-fg-muted hover:text-accent hover:border-border-strong transition-colors"
           >
             <SocialIcons name="RSS" class="w-[18px] h-[18px]" />
           </a>
-        </div>
+        </nav>
       </div>
     </div>
   </section>
 
-  <hr class="border-border" />
-
-  <!-- 01 · Featured Projects -->
-  <section aria-labelledby="featured-projects-heading" class="py-9">
-    <div class="flex items-baseline justify-between gap-4 mb-5">
-      <div class="flex items-baseline gap-2.5">
-        <span class="text-xs font-mono tabular-nums text-accent font-semibold" aria-hidden="true">01</span>
-        <h2 id="featured-projects-heading" class="text-xl font-bold tracking-tight text-fg">
-          Selected Projects
-        </h2>
-      </div>
+  <!-- On Rotation: Rectangular Horizontal Strips (Above Articles) -->
+  <section aria-labelledby="music-heading" class="pt-4 pb-8 border-t border-border">
+    <div class="flex items-baseline justify-between gap-4 mb-3.5">
+      <h2 id="music-heading" class="font-serif text-lg sm:text-xl font-semibold tracking-tight text-fg">
+        On Rotation
+      </h2>
       <a
-        href="/projects"
-        class="inline-flex items-center gap-1 py-1 text-xs sm:text-sm font-mono tabular-nums text-accent link-dashed shrink-0"
+        href="/content"
+        class="inline-flex items-center gap-1 py-1 text-xs sm:text-sm font-medium text-accent link-dashed shrink-0"
       >
-        <span>All Projects ({projects.length})</span>
-        <SocialIcons name="ArrowRight" class="w-4 h-4" />
+        <span>YouTube Music</span>
+        <SocialIcons name="ArrowRight" class="w-3.5 h-3.5" />
       </a>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {featuredProjects.map((project) => (
-        <ProjectCard project={project} />
+    <div class="grid grid-cols-1 gap-3">
+      {SITE.playlists.map((playlist) => (
+        <a
+          href={playlist.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group playlist-strip flex items-center justify-between gap-4 rounded-xl px-4 py-3.5 sm:px-5 sm:py-4"
+        >
+          <div class="flex items-center gap-3.5 sm:gap-4 min-w-0">
+            <span
+              class="w-11 h-11 rounded-lg bg-accent-soft text-accent border border-border flex items-center justify-center shrink-0"
+              aria-hidden="true"
+            >
+              <SocialIcons name="YouTubeMusic" class="w-5 h-5" />
+            </span>
+
+            <div class="min-w-0">
+              <h3 class="text-[0.975rem] font-semibold tracking-tight text-fg group-hover:text-accent transition-colors truncate">
+                {playlist.title}
+              </h3>
+              <p class="text-xs sm:text-[0.8125rem] text-fg-muted truncate mt-0.5">
+                {playlist.sampleTracks.slice(0, 2).join(' · ')}
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3.5 shrink-0 text-xs tabular-nums text-fg-muted">
+            <span class="hidden sm:inline">{playlist.trackCount} tracks</span>
+            <span class="inline-flex items-center gap-1 font-medium text-fg group-hover:text-accent transition-colors">
+              <span>Listen</span>
+              <SocialIcons name="ArrowUpRight" class="w-3.5 h-3.5" />
+            </span>
+          </div>
+        </a>
       ))}
     </div>
   </section>
 
-  <hr class="border-border" />
-
-  <!-- 02 · Recent Articles -->
-  <section aria-labelledby="recent-articles-heading" class="py-9">
+  <!-- Articles (Priority Centerpiece) -->
+  <section aria-labelledby="recent-articles-heading" class="py-10 border-t border-border">
     <div class="flex items-baseline justify-between gap-4 mb-4">
-      <div class="flex items-baseline gap-2.5">
-        <span class="text-xs font-mono tabular-nums text-accent font-semibold" aria-hidden="true">02</span>
-        <h2 id="recent-articles-heading" class="text-xl font-bold tracking-tight text-fg">
-          Recent Writing
-        </h2>
-      </div>
+      <h2 id="recent-articles-heading" class="font-serif text-2xl sm:text-[1.625rem] font-semibold tracking-tight text-fg">
+        Articles
+      </h2>
       <a
         href="/articles"
-        class="inline-flex items-center gap-1 py-1 text-xs sm:text-sm font-mono tabular-nums text-accent link-dashed shrink-0"
+        class="inline-flex items-center gap-1 py-1 text-xs sm:text-sm font-medium text-accent link-dashed shrink-0"
       >
-        <span>All Articles ({articles.length})</span>
+        <span>All articles</span>
         <SocialIcons name="ArrowRight" class="w-4 h-4" />
       </a>
     </div>
@@ -142,69 +163,46 @@ const personSchema = {
     </ul>
   </section>
 
-  <hr class="border-border" />
-
-  <!-- 03 · Notes, Posts & Music -->
-  <section aria-labelledby="recent-content-heading" class="py-9">
+  <!-- Selected Projects -->
+  <section aria-labelledby="featured-projects-heading" class="py-9 border-t border-border">
     <div class="flex items-baseline justify-between gap-4 mb-5">
-      <div class="flex items-baseline gap-2.5">
-        <span class="text-xs font-mono tabular-nums text-accent font-semibold" aria-hidden="true">03</span>
-        <h2 id="recent-content-heading" class="text-xl font-bold tracking-tight text-fg">
-          Notes, Posts & Music
-        </h2>
-      </div>
+      <h2 id="featured-projects-heading" class="font-serif text-xl font-semibold tracking-tight text-fg">
+        Selected Projects
+      </h2>
       <a
-        href="/content"
-        class="inline-flex items-center gap-1 py-1 text-xs sm:text-sm font-mono tabular-nums text-accent link-dashed shrink-0"
+        href="/projects"
+        class="inline-flex items-center gap-1 py-1 text-xs sm:text-sm font-medium text-accent link-dashed shrink-0"
       >
-        <span>All Content ({creatorItems.length})</span>
+        <span>All projects</span>
         <SocialIcons name="ArrowRight" class="w-4 h-4" />
       </a>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {featuredContent.map((item) => (
-        <ContentCard item={item} />
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+      {featuredProjects.map((project) => (
+        <ProjectCard project={project} />
       ))}
     </div>
+  </section>
 
-    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {SITE.playlists.map((playlist) => (
-        <a
-          href={playlist.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="group surface-card flex flex-col justify-between gap-3 rounded-xl p-4 sm:p-5"
-        >
-          <div class="space-y-2.5">
-            <div class="flex items-center justify-between gap-2">
-              <span class="cat-pill cat-media">
-                <SocialIcons name="YouTubeMusic" class="w-3 h-3 shrink-0" />
-                <span>{playlist.platform}</span>
-              </span>
-              <span class="text-xs font-mono tabular-nums text-fg-muted">
-                {playlist.trackCount} tracks
-              </span>
-            </div>
+  <!-- Notes & Posts -->
+  <section aria-labelledby="recent-content-heading" class="py-9 border-t border-border">
+    <div class="flex items-baseline justify-between gap-4 mb-5">
+      <h2 id="recent-content-heading" class="font-serif text-xl font-semibold tracking-tight text-fg">
+        Notes &amp; Posts
+      </h2>
+      <a
+        href="/content"
+        class="inline-flex items-center gap-1 py-1 text-xs sm:text-sm font-medium text-accent link-dashed shrink-0"
+      >
+        <span>All notes</span>
+        <SocialIcons name="ArrowRight" class="w-4 h-4" />
+      </a>
+    </div>
 
-            <div class="space-y-1">
-              <h3 class="text-[1rem] font-semibold tracking-tight text-fg group-hover:text-accent transition-colors leading-snug">
-                {playlist.title}
-              </h3>
-              <p class="text-sm text-fg-muted leading-relaxed">
-                {playlist.description}
-              </p>
-            </div>
-          </div>
-
-          <div class="pt-2.5 border-t border-border flex items-center justify-between gap-2 text-xs font-mono text-fg-muted">
-            <span class="truncate">♪ {playlist.sampleTracks.slice(0, 2).join(' · ')}</span>
-            <span class="inline-flex items-center gap-1 shrink-0 group-hover:text-accent transition-colors">
-              <span>Listen</span>
-              <SocialIcons name="ArrowUpRight" class="w-3.5 h-3.5" />
-            </span>
-          </div>
-        </a>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+      {featuredContent.map((item) => (
+        <ContentCard item={item} />
       ))}
     </div>
   </section>

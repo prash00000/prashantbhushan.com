@@ -1,6 +1,6 @@
 ---
 title: "Article 21 Belongs to the Victim Too"
-description: "A fair trial is not the accused's private privilege — courts cannot ignore the hardship a long, distant trial inflicts on those seeking justice."
+description: "A fair trial is not the accused's private privilege; courts cannot ignore the hardship a long, distant trial inflicts on those seeking justice."
 pubDate: 2026-11-25
 platform: thread
 url: "https://x.com/Embargoliving/status/2125611182753280210"

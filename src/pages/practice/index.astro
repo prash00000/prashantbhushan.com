@@ -2,13 +2,6 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SocialIcons from '../../components/SocialIcons.astro';
 import { SITE } from '../../config/site';
-
-const tagPillClass: Record<string, string> = {
-  'Law & Litigation': 'cat-law',
-  'Civic Tech': 'cat-writing',
-  'Tax & ERP': 'cat-code',
-  Writing: 'cat-media',
-};
 ---
 
 <BaseLayout
@@ -18,45 +11,43 @@ const tagPillClass: Record<string, string> = {
   <section class="space-y-8">
     <div class="space-y-3">
       <div class="flex flex-wrap items-baseline justify-between gap-3">
-        <span class="cat-pill cat-law">
+        <span class="text-xs font-medium text-accent">
           Legal Practice &amp; Research
         </span>
         <a
           href="/practice.md"
-          class="inline-flex items-center gap-1.5 py-1 text-xs font-mono text-fg-muted hover:text-accent link-dashed"
+          class="inline-flex items-center gap-1.5 py-1 text-xs text-fg-muted hover:text-accent link-dashed"
         >
           <SocialIcons name="FileText" class="w-3.5 h-3.5" />
           <span>practice.md</span>
         </a>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-fg">
+      <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight text-fg">
         {SITE.practice.headline}
       </h1>
-      <p class="text-base text-fg-muted leading-relaxed">
+      <p class="text-base text-fg-muted leading-relaxed max-w-[54ch]">
         {SITE.practice.intro}
       </p>
     </div>
 
-    <aside class="rounded-xl border border-border bg-surface-muted/70 p-4 text-xs font-mono text-fg-muted leading-relaxed">
-      {SITE.practice.disclaimer}
+    <aside class="rounded-xl border border-border bg-surface p-4 text-xs text-fg-muted leading-relaxed">
+      <p class="max-w-[60ch]">{SITE.practice.disclaimer}</p>
     </aside>
 
     <div class="space-y-4">
-      <h2 class="text-xl font-bold tracking-tight text-fg">Core Focus Areas</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <h2 class="text-xl font-semibold tracking-tight text-fg">Core Focus Areas</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
         {SITE.practice.areas.map((area) => (
-          <article class="surface-card rounded-xl p-5 space-y-3">
-            <div class="flex items-center justify-between gap-2">
-              <span class:list={['cat-pill', tagPillClass[area.tag] ?? 'cat-law']}>
-                {area.tag}
-              </span>
-            </div>
-            <h3 class="text-base font-bold tracking-tight text-fg">{area.title}</h3>
+          <article class="ruled-item space-y-2.5">
+            <span class="block text-xs font-medium text-accent">
+              {area.tag}
+            </span>
+            <h3 class="text-base font-semibold tracking-tight text-fg">{area.title}</h3>
             <p class="text-sm text-fg-muted leading-relaxed">{area.summary}</p>
-            <ul class="space-y-1.5 pt-2.5 border-t border-border text-xs text-fg-muted">
+            <ul class="space-y-1.5 pt-2 text-xs text-fg-muted">
               {area.deliverables.map((item) => (
                 <li class="flex items-start gap-2">
-                  <span class="font-mono text-accent">·</span>
+                  <span class="text-accent" aria-hidden="true">·</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -69,21 +60,21 @@ const tagPillClass: Record<string, string> = {
     <hr class="border-border" />
 
     <div class="space-y-4">
-      <h2 class="text-xl font-bold tracking-tight text-fg">How We Can Collaborate</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <h2 class="text-xl font-semibold tracking-tight text-fg">How We Can Collaborate</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
         {SITE.practice.engagements.map((eng) => (
-          <div class="surface-card rounded-xl p-4 space-y-2">
-            <p class="text-[11px] font-mono text-accent font-semibold">{eng.cadence}</p>
-            <h3 class="text-sm font-bold text-fg">{eng.title}</h3>
+          <div class="ruled-item space-y-1.5">
+            <p class="text-xs font-medium text-accent">{eng.cadence}</p>
+            <h3 class="text-sm font-semibold text-fg">{eng.title}</h3>
             <p class="text-xs text-fg-muted leading-relaxed">{eng.description}</p>
           </div>
         ))}
       </div>
     </div>
 
-    <section class="surface-card rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <section class="surface-card rounded-xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div class="space-y-1">
-        <h2 class="text-lg font-bold tracking-tight text-fg">Get in touch</h2>
+        <h2 class="text-lg font-semibold tracking-tight text-fg">Get in touch</h2>
         <p class="text-sm text-fg-muted">
           Send a note about legal research, civic-tech tooling, or software collaboration.
         </p>

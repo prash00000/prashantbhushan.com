@@ -1,5 +1,5 @@
 ---
-title: "International Songs Only — Clean A–Z Rotation"
+title: "International Songs Only (Clean A-Z Rotation)"
 description: "320-track English music playlist curated as IndieArt, deduplicated across Spotify and YouTube Music."
 pubDate: 2026-11-20
 platform: playlist

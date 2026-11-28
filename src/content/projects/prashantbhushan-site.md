@@ -1,6 +1,6 @@
 ---
 title: "prashantbhushan.com"
-description: "Editorial personal website built with Astro 7 and Tailwind CSS v4 — uniting legal notes, vibe-coded projects, Substack/X dispatches, and YouTube Music curation."
+description: "Editorial personal website built with Astro 7 and Tailwind CSS v4, uniting legal notes, vibe-coded projects, Substack/X dispatches, and YouTube Music curation."
 pubDate: 2026-11-26
 status: open-source
 domain: web-app

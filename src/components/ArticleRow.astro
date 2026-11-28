@@ -13,53 +13,31 @@ const { article, showTags = false, layout = 'timeline', headingLevel = 'h3' } = 
 const HeadingTag = headingLevel;
 const readingTime = getReadingTime(article.body);
 const categoryMeta = CATEGORIES[article.data.category];
-
-const categoryClassMap: Record<keyof typeof CATEGORIES, string> = {
-  law: 'cat-law',
-  vibecoding: 'cat-code',
-  creator: 'cat-media',
-  essay: 'cat-writing',
-};
 ---
 
 <li
-  class="group py-3.5 px-3 -mx-3 rounded-xl hover:bg-surface/80 transition-colors"
+  class="group py-4 sm:py-5"
   data-article-item
   data-category={article.data.category}
 >
   <article
     class:list={[
       layout === 'timeline'
-        ? 'flex flex-col sm:grid sm:grid-cols-[108px_1fr] sm:items-baseline gap-1.5 sm:gap-5'
+        ? 'flex flex-col sm:grid sm:grid-cols-[112px_1fr] sm:items-baseline gap-1 sm:gap-6'
         : 'space-y-1.5',
     ]}
   >
     {layout === 'timeline' && (
       <time
         datetime={article.data.pubDate.toISOString()}
-        class="text-xs font-mono tabular-nums text-fg-muted shrink-0"
+        class="text-xs font-medium tabular-nums text-fg-muted shrink-0"
       >
         {formatDate(article.data.pubDate)}
       </time>
     )}
 
     <div class="space-y-1.5 min-w-0">
-      <div class="flex flex-wrap items-center gap-2 text-xs font-mono text-fg-muted">
-        {layout === 'compact' && (
-          <>
-            <time datetime={article.data.pubDate.toISOString()} class="tabular-nums">
-              {formatDate(article.data.pubDate)}
-            </time>
-            <span aria-hidden="true">·</span>
-          </>
-        )}
-        <span class:list={['cat-pill', categoryClassMap[article.data.category]]}>
-          {categoryMeta.label}
-        </span>
-        <span class="tabular-nums">{readingTime}</span>
-      </div>
-
-      <HeadingTag class="text-[1.0625rem] font-semibold tracking-tight leading-snug">
+      <HeadingTag class="font-serif text-[1.125rem] sm:text-[1.225rem] font-semibold tracking-tight leading-snug">
         <a
           href={`/articles/${article.id}`}
           transition:name={`article-title-${article.id}`}
@@ -69,9 +47,23 @@ const categoryClassMap: Record<keyof typeof CATEGORIES, string> = {
         </a>
       </HeadingTag>
 
-      <p class="text-sm text-fg-muted leading-relaxed">
+      <p class="text-sm text-fg-muted leading-relaxed max-w-[54ch]">
         {article.data.description}
       </p>
+
+      <div class="flex flex-wrap items-center gap-2 pt-0.5 text-xs text-fg-muted">
+        {layout === 'compact' && (
+          <>
+            <time datetime={article.data.pubDate.toISOString()} class="tabular-nums">
+              {formatDate(article.data.pubDate)}
+            </time>
+            <span aria-hidden="true">·</span>
+          </>
+        )}
+        <span class="font-medium text-accent">{categoryMeta.label}</span>
+        <span aria-hidden="true">·</span>
+        <span class="tabular-nums">{readingTime}</span>
+      </div>
 
       {showTags && article.data.tags.length > 0 && (
         <div class="flex flex-wrap gap-x-3 gap-y-1 pt-1">

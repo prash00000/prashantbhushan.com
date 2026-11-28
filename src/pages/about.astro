@@ -14,18 +14,11 @@ const personSchema = {
   url: `${siteOrigin}/about`,
   sameAs: SITE.socials.filter((s) => s.href.startsWith('http')).map((s) => s.href),
 };
-
-const rolePillClass: Record<string, string> = {
-  law: 'cat-law',
-  vibecoding: 'cat-code',
-  creator: 'cat-media',
-  essay: 'cat-writing',
-};
 ---
 
 <BaseLayout
   title={`About | ${SITE.name}`}
-  description={`About ${SITE.name} — Lawyer, Vibe Coder, Content Creator & Writer`}
+  description={`About ${SITE.name} | Lawyer, Vibe Coder, Content Creator & Writer`}
   structuredData={personSchema}
 >
   <section class="space-y-8">
@@ -83,17 +76,17 @@ const rolePillClass: Record<string, string> = {
     <hr class="border-border" />
 
     <section aria-labelledby="pillars-heading" class="space-y-4">
-      <h2 id="pillars-heading" class="text-xl font-bold tracking-tight text-fg">
+      <h2 id="pillars-heading" class="text-xl font-semibold tracking-tight text-fg">
         Focus &amp; Craft
       </h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
         {SITE.roles.map((role) => (
           <a
             href={role.href}
-            class="group surface-card rounded-xl p-4 space-y-2"
+            class="group ruled-item space-y-1.5"
           >
             <div class="flex items-center justify-between gap-2">
-              <span class:list={['cat-pill', rolePillClass[role.key] ?? 'cat-law']}>
+              <span class="text-xs font-medium text-accent">
                 {role.label}
               </span>
               <SocialIcons name="ArrowRight" class="w-4 h-4 text-fg-muted group-hover:text-accent transition-transform group-hover:translate-x-0.5" />
@@ -105,13 +98,13 @@ const rolePillClass: Record<string, string> = {
     </section>
 
     <section aria-labelledby="now-heading" class="space-y-3">
-      <h2 id="now-heading" class="text-xl font-bold tracking-tight text-fg">
+      <h2 id="now-heading" class="text-xl font-semibold tracking-tight text-fg">
         What I'm Focused On Now
       </h2>
       <ul class="space-y-2.5 text-sm sm:text-[0.975rem] text-fg-muted">
         {SITE.about.nowItems.map((item) => (
           <li class="flex items-start gap-2.5">
-            <span class="font-mono text-accent mt-0.5 shrink-0">→</span>
+            <span class="text-accent mt-0.5 shrink-0" aria-hidden="true">→</span>
             <span>{item}</span>
           </li>
         ))}
@@ -122,51 +115,53 @@ const rolePillClass: Record<string, string> = {
       <div class="flex flex-wrap items-center justify-between gap-2">
         <div class="flex items-center gap-2">
           <SocialIcons name="YouTubeMusic" class="w-5 h-5 text-accent" />
-          <h2 id="music-heading" class="text-xl font-bold tracking-tight text-fg">
+          <h2 id="music-heading" class="text-xl font-semibold tracking-tight text-fg">
             On Rotation · YouTube Music
           </h2>
         </div>
-        <span class="text-xs font-mono text-fg-muted">Curated under IndieArt</span>
+        <span class="text-xs text-fg-muted">Curated under IndieArt</span>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 gap-3">
         {SITE.playlists.map((playlist) => (
-          <div class="surface-card rounded-xl p-5 space-y-3 flex flex-col justify-between">
-            <div class="space-y-2">
-              <div class="flex items-center justify-between gap-2">
-                <h3 class="text-base font-bold text-fg">{playlist.title}</h3>
-                <span class="cat-pill cat-media tabular-nums shrink-0">{playlist.trackCount} tracks</span>
+          <div class="playlist-strip rounded-xl p-5 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="space-y-0.5">
+                <h3 class="text-base font-semibold text-fg">{playlist.title}</h3>
+                <p class="text-xs text-fg-muted">{playlist.description}</p>
               </div>
-              <p class="text-xs text-fg-muted leading-relaxed">{playlist.description}</p>
-              <ul class="space-y-1 pt-1 text-xs font-mono text-fg-muted">
-                {playlist.sampleTracks.slice(0, 5).map((track) => (
-                  <li class="truncate">♪ {track}</li>
-                ))}
-              </ul>
+              <div class="flex items-center gap-3 text-xs tabular-nums text-fg-muted">
+                <span>{playlist.trackCount} tracks</span>
+                <a
+                  href={playlist.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1 py-1 font-medium text-accent link-dashed"
+                >
+                  <span>Listen on YT Music</span>
+                  <SocialIcons name="ArrowUpRight" class="w-3.5 h-3.5" />
+                </a>
+              </div>
             </div>
-            <a
-              href={playlist.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-1 py-1 text-xs font-mono text-accent link-dashed self-start"
-            >
-              <span>Listen on YT Music</span>
-              <SocialIcons name="ArrowUpRight" class="w-3.5 h-3.5" />
-            </a>
+            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 pt-2 border-t border-border text-xs text-fg-muted">
+              {playlist.sampleTracks.slice(0, 6).map((track) => (
+                <li class="truncate">{track}</li>
+              ))}
+            </ul>
           </div>
         ))}
       </div>
     </section>
 
-    <section class="surface-card rounded-xl p-5 space-y-2">
-      <p class="text-xs font-mono uppercase tracking-wider text-accent font-semibold">
+    <section class="surface-card rounded-xl p-5 space-y-1.5">
+      <h2 class="text-base font-semibold tracking-tight text-fg">
         Agent &amp; Reader Friendly
-      </p>
+      </h2>
       <p class="text-sm text-fg-muted leading-relaxed">
         Every article and core page exposes a clean Markdown mirror. Explore{' '}
-        <a href="/llms.txt" class="link-dashed font-mono text-fg">/llms.txt</a>,{' '}
-        <a href="/about.md" class="link-dashed font-mono text-fg">/about.md</a>,{' '}
-        <a href="/practice.md" class="link-dashed font-mono text-fg">/practice.md</a>, or append{' '}
+        <a href="/llms.txt" class="link-dashed font-mono text-xs text-fg">/llms.txt</a>,{' '}
+        <a href="/about.md" class="link-dashed font-mono text-xs text-fg">/about.md</a>,{' '}
+        <a href="/practice.md" class="link-dashed font-mono text-xs text-fg">/practice.md</a>, or append{' '}
         <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-surface-muted border border-border">.md</code>{' '}
         to any article URL.
       </p>

@@ -1,6 +1,6 @@
 ---
 title: "Shipping RetailFlow ERP: Offline-First GST, Ledgers & WhatsApp Delivery"
-description: "Inside v1.4.0 of RetailFlow ERP — pairing Electron, React 19, Zustand, and IndexedDB with statutory Indian GST compliance and local .bak database backups."
+description: "Inside v1.4.0 of RetailFlow ERP: pairing Electron, React 19, Zustand, and IndexedDB with statutory Indian GST compliance and local .bak database backups."
 pubDate: 2026-11-27
 category: vibecoding
 tags:

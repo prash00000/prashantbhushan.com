@@ -1,5 +1,5 @@
 ---
-title: "Indian: Chill & Late-Night — 154-Track Rotation"
+title: "Indian: Chill & Late-Night (154-Track Rotation)"
 description: "Clean A–Z Indian chill, indie & late-night playlist curated as IndieArt, deduplicated from Spotify and YouTube Music."
 pubDate: 2026-11-21
 platform: playlist
