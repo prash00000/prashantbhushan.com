@@ -206,9 +206,16 @@ export function parseRssOrAtomFeed(
     const baseText = cleanedDesc || cleanedTitle;
     if (!baseText) continue;
 
-    const split = cleanedTitle
-      ? { title: cleanedTitle, description: cleanedDesc || cleanedTitle }
-      : splitNoteHeadline(baseText);
+    // Many X RSS bridges emit boilerplate like "Prashant (@Embargoliving)" or "Post by @Embargoliving" in <title>.
+    const isGenericAuthorTitle =
+      !cleanedTitle ||
+      /^(?:prashant(?:\s+bhushan)?|@?embargoliving)\b.*(?::|on x)?$/i.test(cleanedTitle) ||
+      /^(?:post|tweet)\s+by\b/i.test(cleanedTitle);
+
+    const split =
+      !isGenericAuthorTitle
+        ? { title: cleanedTitle, description: cleanedDesc || cleanedTitle }
+        : splitNoteHeadline(baseText);
 
     results.push({
       id: `${platform}-rss-${idx}-${pubDate.valueOf()}`,
