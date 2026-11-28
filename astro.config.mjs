@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
+import vercel from '@astrojs/vercel';
 
 const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
@@ -9,6 +10,9 @@ const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
 
 export default defineConfig({
   site: siteUrl,
+  adapter: vercel({
+    maxDuration: 15,
+  }),
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],

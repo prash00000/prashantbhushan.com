@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # local impeccable screenshots/reports
 .impeccable/
+
+# vercel adapter build output
+.vercel/

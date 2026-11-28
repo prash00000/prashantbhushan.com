@@ -1,4 +1,6 @@
 ---
+export const prerender = false;
+
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleRow from '../components/ArticleRow.astro';
 import ProjectCard from '../components/ProjectCard.astro';
@@ -12,6 +14,12 @@ import {
   getSortedProjects,
   getSortedCreatorItems,
 } from '../utils/content';
+import { getMergedCreatorDispatches } from '../utils/liveFeed';
+
+Astro.response.headers.set(
+  'Cache-Control',
+  'public, s-maxage=900, stale-while-revalidate=3600',
+);
 
 const articles = await getPublishedArticles();
 const recentArticles = articles.slice(0, 6);
@@ -19,34 +27,34 @@ const recentArticles = articles.slice(0, 6);
 const projects = await getSortedProjects();
 const featuredProjects = projects.filter((p) => p.data.featured).slice(0, 2);
 
-const creatorItems = await getSortedCreatorItems();
-const platformIconMap: Record<string, IconName> = {
-  substack: 'Substack',
-  thread: 'X',
-  playlist: 'YouTubeMusic',
-  youtube: 'ArrowUpRight',
-  podcast: 'ArrowUpRight',
-  talk: 'ArrowUpRight',
+const localCreatorItems = await getSortedCreatorItems();
+const mergedDispatches = await getMergedCreatorDispatches(localCreatorItems);
+
+const platformMetaMap: Record<string, { label: string; icon: IconName }> = {
+  substack: { label: 'Substack', icon: 'Substack' },
+  thread: { label: 'X Post', icon: 'X' },
+  playlist: { label: 'YT Music', icon: 'YouTubeMusic' },
+  youtube: { label: 'YouTube', icon: 'ArrowUpRight' },
+  podcast: { label: 'Podcast', icon: 'ArrowUpRight' },
+  talk: { label: 'Talk', icon: 'ArrowUpRight' },
 };
 
-const noteTickerItems: TickerItem[] = creatorItems
-  .filter((c) => c.data.platform !== 'playlist')
-  .map((item) => ({
-    title: item.data.title,
-    subtitle: item.data.description,
-    meta: formatDate(item.data.pubDate),
-    url: item.data.url,
-    icon: platformIconMap[item.data.platform] ?? 'ArrowUpRight',
-  }));
+const latestPostItems: TickerItem[] = mergedDispatches
+  .filter((item) => item.platform !== 'playlist')
+  .slice(0, 10)
+  .map((item) => {
+    const meta = platformMetaMap[item.platform] ?? { label: 'Note', icon: 'ArrowUpRight' as IconName };
+    return {
+      title: item.title,
+      subtitle: item.description,
+      platformLabel: meta.label,
+      meta: formatDate(item.pubDate),
+      url: item.url,
+      icon: meta.icon,
+    };
+  });
 
-const playlists: readonly PlaylistItem[] = SITE.playlists;
-const playlistTickerItems: TickerItem[] = playlists.map((playlist) => ({
-  title: playlist.title,
-  subtitle: playlist.sampleTracks.slice(0, 3).map((t) => t.split(' - ')[0]).join(' · '),
-  meta: `${playlist.trackCount} tracks`,
-  url: playlist.url,
-  icon: playlist.platform === 'Spotify' ? 'Spotify' : 'YouTubeMusic',
-}));
+const playlists: readonly PlaylistItem[] = SITE.playlists.slice(0, 4);
 
 const siteOrigin = (Astro.site ?? new URL(SITE.siteUrl)).toString().replace(/\/$/, '');
 const personSchema = {
@@ -115,24 +123,63 @@ const personSchema = {
     </div>
   </section>
 
-  <!-- Notes & Posts: Continuous Right-to-Left Rail (Above On Rotation) -->
+  <!-- Latest Posts: Auto-Synced Substack Notes & X Posts (2-Line Moving Rail) -->
   <TickerRail
-    heading="Notes & Posts"
+    heading="Latest Posts"
     headingId="recent-content-heading"
-    items={noteTickerItems}
-    durationSeconds={34}
-    fixedCardWidth={true}
+    items={latestPostItems}
+    durationSeconds={36}
     actionHref="/content"
     actionLabel="All notes"
   />
 
-  <!-- On Rotation: Continuous Right-to-Left Rail (Above Articles) -->
-  <TickerRail
-    heading="On Rotation"
-    headingId="music-heading"
-    items={playlistTickerItems}
-    durationSeconds={24}
-  />
+  <!-- On Rotation: Static 4-Slot Rectangular Playlist Grid (Above Articles) -->
+  <section aria-labelledby="music-heading" class="pt-4 pb-8 border-t border-border">
+    <div class="mb-3.5">
+      <h2 id="music-heading" class="font-serif text-lg sm:text-xl font-semibold tracking-tight text-fg">
+        On Rotation
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {playlists.map((playlist) => {
+        const iconName = playlist.platform === 'Spotify' ? 'Spotify' : 'YouTubeMusic';
+        return (
+          <a
+            href={playlist.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group playlist-strip flex flex-col justify-between gap-2 rounded-xl px-4 py-3 min-w-0"
+          >
+            <div class="flex items-center justify-between gap-2.5 min-w-0">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <span
+                  class="w-7 h-7 rounded-md bg-accent-soft text-accent border border-border flex items-center justify-center shrink-0"
+                  aria-hidden="true"
+                >
+                  <SocialIcons name={iconName} class="w-4 h-4" />
+                </span>
+                <h3 class="text-sm font-semibold tracking-tight text-fg group-hover:text-accent transition-colors truncate">
+                  {playlist.title}
+                </h3>
+              </div>
+              <SocialIcons
+                name="ArrowUpRight"
+                class="w-3.5 h-3.5 shrink-0 text-fg-muted group-hover:text-accent transition-colors"
+              />
+            </div>
+
+            <div class="flex items-center justify-between gap-3 text-xs text-fg-muted">
+              <span class="truncate">
+                {playlist.sampleTracks.slice(0, 2).map((t) => t.split(' - ')[0]).join(' · ')}
+              </span>
+              <span class="shrink-0 tabular-nums">{playlist.trackCount} tracks</span>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </section>
 
   <!-- Articles (Priority Centerpiece) -->
   <section aria-labelledby="recent-articles-heading" class="py-10 border-t border-border">

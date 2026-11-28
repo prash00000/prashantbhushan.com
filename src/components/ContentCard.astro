@@ -1,14 +1,16 @@
 ---
 import { type CreatorEntry, formatDate } from '../utils/content';
+import type { DispatchItem } from '../utils/liveFeed';
 import SocialIcons, { type IconName } from './SocialIcons.astro';
 
 interface Props {
-  item: CreatorEntry;
+  item: CreatorEntry | DispatchItem;
   headingLevel?: 'h2' | 'h3';
 }
 
 const { item, headingLevel = 'h3' } = Astro.props;
 const HeadingTag = headingLevel;
+const data = 'data' in item ? item.data : item;
 
 const platformMeta: Record<
   CreatorEntry['data']['platform'],
@@ -22,13 +24,13 @@ const platformMeta: Record<
   talk: { label: 'Talk', icon: 'ArrowUpRight' },
 };
 
-const meta = platformMeta[item.data.platform];
+const meta = platformMeta[data.platform];
 ---
 
 <article
   class="group ruled-item flex flex-col justify-between"
   data-content-card
-  data-platform={item.data.platform}
+  data-platform={data.platform}
 >
   <div>
     <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5 text-xs text-fg-muted">
@@ -36,24 +38,24 @@ const meta = platformMeta[item.data.platform];
         <SocialIcons name={meta.icon} class="w-3.5 h-3.5 shrink-0" />
         <span>{meta.label}</span>
       </span>
-      <time datetime={item.data.pubDate.toISOString()} class="tabular-nums">
-        {formatDate(item.data.pubDate)}
+      <time datetime={data.pubDate.toISOString()} class="tabular-nums">
+        {formatDate(data.pubDate)}
       </time>
     </div>
 
     <HeadingTag class="text-[1.0625rem] font-semibold tracking-tight text-fg leading-snug">
       <a
-        href={item.data.url}
+        href={data.url}
         target="_blank"
         rel="noopener noreferrer"
         class="group-hover:text-accent hover:underline decoration-dashed underline-offset-4 transition-colors"
       >
-        <span>{item.data.title}</span><SocialIcons name="ArrowUpRight" class="inline-block w-3.5 h-3.5 ml-1 align-text-top opacity-75" />
+        <span>{data.title}</span><SocialIcons name="ArrowUpRight" class="inline-block w-3.5 h-3.5 ml-1 align-text-top opacity-75" />
       </a>
     </HeadingTag>
 
     <p class="mt-1.5 text-sm text-fg-muted leading-relaxed">
-      {item.data.description}
+      {data.description}
     </p>
   </div>
 </article>

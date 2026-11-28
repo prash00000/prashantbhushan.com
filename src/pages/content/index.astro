@@ -1,10 +1,19 @@
 ---
+export const prerender = false;
+
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ContentCard from '../../components/ContentCard.astro';
 import { SITE } from '../../config/site';
 import { getSortedCreatorItems } from '../../utils/content';
+import { getMergedCreatorDispatches } from '../../utils/liveFeed';
 
-const items = await getSortedCreatorItems();
+Astro.response.headers.set(
+  'Cache-Control',
+  'public, s-maxage=900, stale-while-revalidate=3600',
+);
+
+const localItems = await getSortedCreatorItems();
+const items = await getMergedCreatorDispatches(localItems);
 
 const platforms = [
   { key: 'all', label: `All (${items.length})` },

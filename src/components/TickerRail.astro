@@ -4,6 +4,7 @@ import SocialIcons, { type IconName } from './SocialIcons.astro';
 export interface TickerItem {
   title: string;
   subtitle: string;
+  platformLabel: string;
   meta: string;
   url: string;
   icon: IconName;
@@ -14,7 +15,6 @@ interface Props {
   headingId: string;
   items: readonly TickerItem[];
   durationSeconds?: number;
-  fixedCardWidth?: boolean;
   actionHref?: string;
   actionLabel?: string;
 }
@@ -23,8 +23,7 @@ const {
   heading,
   headingId,
   items,
-  durationSeconds = 28,
-  fixedCardWidth = false,
+  durationSeconds = 34,
   actionHref,
   actionLabel,
 } = Astro.props;
@@ -56,46 +55,51 @@ const {
           ]}
           aria-hidden={isClone ? 'true' : undefined}
         >
-          {items.map((item) => (
-            <a
-              href={item.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              tabindex={isClone ? -1 : undefined}
-              class:list={[
-                'group playlist-strip inline-flex items-center justify-between gap-4 rounded-xl px-4 py-2.5 shrink-0',
-                fixedCardWidth && 'w-[320px] sm:w-[410px]',
-              ]}
-            >
-              <div class="flex items-center gap-3 min-w-0">
-                <span
-                  class="w-8 h-8 rounded-lg bg-accent-soft text-accent border border-border flex items-center justify-center shrink-0"
-                  aria-hidden="true"
-                >
-                  <SocialIcons name={item.icon} class="w-4 h-4" />
-                </span>
-                <div class="min-w-0">
-                  {isClone ? (
-                    <span class="block text-sm font-semibold tracking-tight text-fg group-hover:text-accent transition-colors truncate">
+          {items.map((item) => {
+            const hasDistinctSubtitle =
+              Boolean(item.subtitle) &&
+              item.subtitle.toLowerCase() !== item.title.toLowerCase();
+            return (
+              <a
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                tabindex={isClone ? -1 : undefined}
+                class="group playlist-strip flex flex-col justify-between gap-2 rounded-xl px-4 py-3 w-[310px] sm:w-[360px] shrink-0"
+              >
+                <div class="flex items-center justify-between gap-2 text-xs text-fg-muted">
+                  <span class="inline-flex items-center gap-1.5 font-medium text-accent">
+                    <SocialIcons name={item.icon} class="w-3.5 h-3.5 shrink-0" />
+                    <span>{item.platformLabel}</span>
+                  </span>
+                  <span class="inline-flex items-center gap-1 tabular-nums group-hover:text-accent transition-colors">
+                    <span>{item.meta}</span>
+                    <SocialIcons name="ArrowUpRight" class="w-3 h-3 shrink-0" />
+                  </span>
+                </div>
+
+                {isClone ? (
+                  <p class="text-[0.875rem] leading-snug line-clamp-2 whitespace-normal text-fg">
+                    <span class="font-semibold group-hover:text-accent transition-colors">
                       {item.title}
                     </span>
-                  ) : (
-                    <h3 class="text-sm font-semibold tracking-tight text-fg group-hover:text-accent transition-colors truncate">
-                      {item.title}
-                    </h3>
-                  )}
-                  <p class="text-xs text-fg-muted truncate mt-0.5">
-                    {item.subtitle}
+                    {hasDistinctSubtitle && (
+                      <span class="text-fg-muted font-normal">. {item.subtitle}</span>
+                    )}
                   </p>
-                </div>
-              </div>
-
-              <span class="inline-flex items-center gap-1 shrink-0 text-xs tabular-nums text-fg-muted group-hover:text-accent transition-colors whitespace-nowrap">
-                <span>{item.meta}</span>
-                <SocialIcons name="ArrowUpRight" class="w-3.5 h-3.5" />
-              </span>
-            </a>
-          ))}
+                ) : (
+                  <h3 class="text-[0.875rem] leading-snug line-clamp-2 whitespace-normal text-fg">
+                    <span class="font-semibold group-hover:text-accent transition-colors">
+                      {item.title}
+                    </span>
+                    {hasDistinctSubtitle && (
+                      <span class="text-fg-muted font-normal">. {item.subtitle}</span>
+                    )}
+                  </h3>
+                )}
+              </a>
+            );
+          })}
         </div>
       ))}
     </div>
