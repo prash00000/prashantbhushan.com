@@ -128,7 +128,7 @@ const personSchema = {
     heading="Latest Posts"
     headingId="recent-content-heading"
     items={latestPostItems}
-    durationSeconds={36}
+    durationSeconds={Math.max(36, latestPostItems.length * 7)}
     actionHref="/content"
     actionLabel="All notes"
   />

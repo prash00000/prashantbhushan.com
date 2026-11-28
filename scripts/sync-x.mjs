@@ -164,7 +164,6 @@ async function main() {
 
         const timeEl = article.querySelector('time[datetime]');
         const datetime = timeEl?.getAttribute('datetime') || '';
-        if (!datetime) continue;
 
         const textEl = article.querySelector('[data-testid="tweetText"]');
         const text = textEl?.innerText?.trim() || '';
@@ -184,7 +183,11 @@ async function main() {
     const freshPosts = extracted.filter((p) => !existingIds.has(p.statusId)).slice(0, MAX_POSTS);
 
     for (const post of freshPosts) {
-      const dateIso = new Date(post.datetime).toISOString().slice(0, 10);
+      // Decode exact timestamp from Twitter Snowflake ID when DOM <time> is absent
+      const timestampMs = post.datetime
+        ? new Date(post.datetime).valueOf()
+        : Number((BigInt(post.statusId) >> 22n) + 1288834974657n);
+      const dateIso = new Date(timestampMs).toISOString().replace(/\.\d{3}Z$/, 'Z');
       const { title, description } = splitTweetHeadline(post.text);
       const outPath = path.join(CREATOR_DIR, `x-${post.statusId}.md`);
       const md = [
