@@ -1,0 +1,103 @@
+---
+import SocialIcons, { type IconName } from './SocialIcons.astro';
+
+export interface TickerItem {
+  title: string;
+  subtitle: string;
+  meta: string;
+  url: string;
+  icon: IconName;
+}
+
+interface Props {
+  heading: string;
+  headingId: string;
+  items: readonly TickerItem[];
+  durationSeconds?: number;
+  fixedCardWidth?: boolean;
+  actionHref?: string;
+  actionLabel?: string;
+}
+
+const {
+  heading,
+  headingId,
+  items,
+  durationSeconds = 28,
+  fixedCardWidth = false,
+  actionHref,
+  actionLabel,
+} = Astro.props;
+---
+
+<section aria-labelledby={headingId} class="pt-4 pb-6 border-t border-border">
+  <div class="flex items-baseline justify-between gap-4 mb-3">
+    <h2 id={headingId} class="font-serif text-lg sm:text-xl font-semibold tracking-tight text-fg">
+      {heading}
+    </h2>
+    {actionHref && actionLabel && (
+      <a
+        href={actionHref}
+        class="inline-flex items-center gap-1 py-1 text-xs sm:text-sm font-medium text-accent link-dashed shrink-0"
+      >
+        <span>{actionLabel}</span>
+        <SocialIcons name="ArrowRight" class="w-3.5 h-3.5" />
+      </a>
+    )}
+  </div>
+
+  <div class="ticker-viewport -mx-1 px-1 py-0.5">
+    <div class="ticker-track" style={`animation-duration: ${durationSeconds}s`}>
+      {[false, true].map((isClone) => (
+        <div
+          class:list={[
+            'flex items-stretch gap-3 pr-3 shrink-0',
+            isClone && 'ticker-clone',
+          ]}
+          aria-hidden={isClone ? 'true' : undefined}
+        >
+          {items.map((item) => (
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              tabindex={isClone ? -1 : undefined}
+              class:list={[
+                'group playlist-strip inline-flex items-center justify-between gap-4 rounded-xl px-4 py-2.5 shrink-0',
+                fixedCardWidth && 'w-[300px] sm:w-[345px]',
+              ]}
+            >
+              <div class="flex items-center gap-3 min-w-0">
+                <span
+                  class="w-8 h-8 rounded-lg bg-accent-soft text-accent border border-border flex items-center justify-center shrink-0"
+                  aria-hidden="true"
+                >
+                  <SocialIcons name={item.icon} class="w-4 h-4" />
+                </span>
+                <div class="min-w-0">
+                  {isClone ? (
+                    <span class="block text-sm font-semibold tracking-tight text-fg group-hover:text-accent transition-colors truncate">
+                      {item.title}
+                    </span>
+                  ) : (
+                    <h3 class="text-sm font-semibold tracking-tight text-fg group-hover:text-accent transition-colors truncate">
+                      {item.title}
+                    </h3>
+                  )}
+                  <p class="text-xs text-fg-muted truncate mt-0.5">
+                    {item.subtitle}
+                  </p>
+                </div>
+              </div>
+
+              <span class="inline-flex items-center gap-1 shrink-0 text-xs tabular-nums text-fg-muted group-hover:text-accent transition-colors whitespace-nowrap">
+                <span>{item.meta}</span>
+                <SocialIcons name="ArrowUpRight" class="w-3.5 h-3.5" />
+              </span>
+            </a>
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -2,11 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleRow from '../components/ArticleRow.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import ContentCard from '../components/ContentCard.astro';
+import TickerRail, { type TickerItem } from '../components/TickerRail.astro';
 import NewsletterBox from '../components/NewsletterBox.astro';
-import SocialIcons from '../components/SocialIcons.astro';
+import SocialIcons, { type IconName } from '../components/SocialIcons.astro';
 import { type PlaylistItem, SITE } from '../config/site';
 import {
+  formatDate,
   getPublishedArticles,
   getSortedProjects,
   getSortedCreatorItems,
@@ -19,8 +20,33 @@ const projects = await getSortedProjects();
 const featuredProjects = projects.filter((p) => p.data.featured).slice(0, 2);
 
 const creatorItems = await getSortedCreatorItems();
-const featuredContent = creatorItems.filter((c) => c.data.featured).slice(0, 2);
+const platformIconMap: Record<string, IconName> = {
+  substack: 'Substack',
+  thread: 'X',
+  playlist: 'YouTubeMusic',
+  youtube: 'ArrowUpRight',
+  podcast: 'ArrowUpRight',
+  talk: 'ArrowUpRight',
+};
+
+const noteTickerItems: TickerItem[] = creatorItems
+  .filter((c) => c.data.platform !== 'playlist')
+  .map((item) => ({
+    title: item.data.title,
+    subtitle: item.data.description,
+    meta: formatDate(item.data.pubDate),
+    url: item.data.url,
+    icon: platformIconMap[item.data.platform] ?? 'ArrowUpRight',
+  }));
+
 const playlists: readonly PlaylistItem[] = SITE.playlists;
+const playlistTickerItems: TickerItem[] = playlists.map((playlist) => ({
+  title: playlist.title,
+  subtitle: playlist.sampleTracks.slice(0, 3).map((t) => t.split(' - ')[0]).join(' · '),
+  meta: `${playlist.trackCount} tracks`,
+  url: playlist.url,
+  icon: playlist.platform === 'Spotify' ? 'Spotify' : 'YouTubeMusic',
+}));
 
 const siteOrigin = (Astro.site ?? new URL(SITE.siteUrl)).toString().replace(/\/$/, '');
 const personSchema = {
@@ -36,7 +62,7 @@ const personSchema = {
 
 <BaseLayout title={SITE.title} description={SITE.description} structuredData={personSchema}>
   <!-- Hero Masthead -->
-  <section id="hero" class="pt-4 pb-9">
+  <section id="hero" class="pt-4 pb-7">
     <div class="flex flex-col sm:flex-row sm:items-start gap-5 sm:gap-7">
       {SITE.avatarSrc && (
         <a
@@ -89,88 +115,24 @@ const personSchema = {
     </div>
   </section>
 
-  <!-- On Rotation: Horizontal News-Bar Playlist Ticker (Above Articles) -->
-  <section aria-labelledby="music-heading" class="pt-4 pb-8 border-t border-border">
-    <div class="mb-3.5">
-      <h2 id="music-heading" class="font-serif text-lg sm:text-xl font-semibold tracking-tight text-fg">
-        On Rotation
-      </h2>
-    </div>
+  <!-- Notes & Posts: Continuous Right-to-Left Rail (Above On Rotation) -->
+  <TickerRail
+    heading="Notes & Posts"
+    headingId="recent-content-heading"
+    items={noteTickerItems}
+    durationSeconds={34}
+    fixedCardWidth={true}
+    actionHref="/content"
+    actionLabel="All notes"
+  />
 
-    <div class="ticker-viewport -mx-1 px-1 py-0.5">
-      <div class="ticker-track">
-        <div class="flex items-stretch gap-3 pr-3 shrink-0">
-          {playlists.map((playlist) => {
-            const iconName = playlist.platform === 'Spotify' ? 'Spotify' : 'YouTubeMusic';
-            return (
-              <a
-                href={playlist.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="group playlist-strip inline-flex items-center justify-between gap-5 rounded-xl px-4 py-3 shrink-0"
-              >
-                <div class="flex items-center gap-3">
-                  <span
-                    class="w-8 h-8 rounded-lg bg-accent-soft text-accent border border-border flex items-center justify-center shrink-0"
-                    aria-hidden="true"
-                  >
-                    <SocialIcons name={iconName} class="w-4 h-4" />
-                  </span>
-                  <div>
-                    <h3 class="text-sm font-semibold tracking-tight text-fg group-hover:text-accent transition-colors whitespace-nowrap">
-                      {playlist.title}
-                    </h3>
-                    <p class="text-xs text-fg-muted whitespace-nowrap mt-0.5">
-                      {playlist.sampleTracks.slice(0, 3).map((t) => t.split(' - ')[0]).join(' · ')}
-                    </p>
-                  </div>
-                </div>
-
-                <span class="inline-flex items-center gap-1 shrink-0 text-xs tabular-nums text-fg-muted group-hover:text-accent transition-colors whitespace-nowrap">
-                  <span>{playlist.trackCount} tracks</span>
-                  <SocialIcons name="ArrowUpRight" class="w-3.5 h-3.5" />
-                </span>
-              </a>
-            );
-          })}
-        </div>
-
-        <div class="ticker-clone flex items-stretch gap-3 pr-3 shrink-0" aria-hidden="true">
-          {playlists.map((playlist) => {
-            const iconName = playlist.platform === 'Spotify' ? 'Spotify' : 'YouTubeMusic';
-            return (
-              <a
-                href={playlist.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                tabindex="-1"
-                class="group playlist-strip inline-flex items-center justify-between gap-5 rounded-xl px-4 py-3 shrink-0"
-              >
-                <div class="flex items-center gap-3">
-                  <span class="w-8 h-8 rounded-lg bg-accent-soft text-accent border border-border flex items-center justify-center shrink-0">
-                    <SocialIcons name={iconName} class="w-4 h-4" />
-                  </span>
-                  <div>
-                    <span class="block text-sm font-semibold tracking-tight text-fg group-hover:text-accent transition-colors whitespace-nowrap">
-                      {playlist.title}
-                    </span>
-                    <p class="text-xs text-fg-muted whitespace-nowrap mt-0.5">
-                      {playlist.sampleTracks.slice(0, 3).map((t) => t.split(' - ')[0]).join(' · ')}
-                    </p>
-                  </div>
-                </div>
-
-                <span class="inline-flex items-center gap-1 shrink-0 text-xs tabular-nums text-fg-muted group-hover:text-accent transition-colors whitespace-nowrap">
-                  <span>{playlist.trackCount} tracks</span>
-                  <SocialIcons name="ArrowUpRight" class="w-3.5 h-3.5" />
-                </span>
-              </a>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- On Rotation: Continuous Right-to-Left Rail (Above Articles) -->
+  <TickerRail
+    heading="On Rotation"
+    headingId="music-heading"
+    items={playlistTickerItems}
+    durationSeconds={24}
+  />
 
   <!-- Articles (Priority Centerpiece) -->
   <section aria-labelledby="recent-articles-heading" class="py-10 border-t border-border">
@@ -212,28 +174,6 @@ const personSchema = {
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
       {featuredProjects.map((project) => (
         <ProjectCard project={project} />
-      ))}
-    </div>
-  </section>
-
-  <!-- Notes & Posts -->
-  <section aria-labelledby="recent-content-heading" class="py-9 border-t border-border">
-    <div class="flex items-baseline justify-between gap-4 mb-5">
-      <h2 id="recent-content-heading" class="font-serif text-xl font-semibold tracking-tight text-fg">
-        Notes &amp; Posts
-      </h2>
-      <a
-        href="/content"
-        class="inline-flex items-center gap-1 py-1 text-xs sm:text-sm font-medium text-accent link-dashed shrink-0"
-      >
-        <span>All notes</span>
-        <SocialIcons name="ArrowRight" class="w-4 h-4" />
-      </a>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
-      {featuredContent.map((item) => (
-        <ContentCard item={item} />
       ))}
     </div>
   </section>
