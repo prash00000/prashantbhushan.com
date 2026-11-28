@@ -28,3 +28,6 @@ pnpm-debug.log*
 
 # vercel adapter build output
 .vercel/
+
+# local external browser X sync profile (contains user login session)
+.x-sync-profile/
