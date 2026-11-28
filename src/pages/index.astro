@@ -103,41 +103,47 @@ const personSchema = {
       </a>
     </div>
 
-    <div class="grid grid-cols-1 gap-3">
-      {SITE.playlists.map((playlist) => (
-        <a
-          href={playlist.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="group playlist-strip flex items-center justify-between gap-4 rounded-xl px-4 py-3.5 sm:px-5 sm:py-4"
-        >
-          <div class="flex items-center gap-3.5 sm:gap-4 min-w-0">
-            <span
-              class="w-11 h-11 rounded-lg bg-accent-soft text-accent border border-border flex items-center justify-center shrink-0"
-              aria-hidden="true"
-            >
-              <SocialIcons name="YouTubeMusic" class="w-5 h-5" />
-            </span>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {SITE.playlists.map((playlist, idx) => {
+        const tickerFeed = `${playlist.sampleTracks.join('  ·  ')}  ·  `;
+        return (
+          <a
+            href={playlist.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group playlist-strip block rounded-xl px-4 py-3 min-w-0"
+          >
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <span
+                  class="w-7 h-7 rounded-md bg-accent-soft text-accent border border-border flex items-center justify-center shrink-0"
+                  aria-hidden="true"
+                >
+                  <SocialIcons name="YouTubeMusic" class="w-4 h-4" />
+                </span>
+                <h3 class="text-sm font-semibold tracking-tight text-fg group-hover:text-accent transition-colors truncate">
+                  {playlist.title}
+                </h3>
+              </div>
 
-            <div class="min-w-0">
-              <h3 class="text-[0.975rem] font-semibold tracking-tight text-fg group-hover:text-accent transition-colors truncate">
-                {playlist.title}
-              </h3>
-              <p class="text-xs sm:text-[0.8125rem] text-fg-muted truncate mt-0.5">
-                {playlist.sampleTracks.slice(0, 2).join(' · ')}
-              </p>
+              <span class="inline-flex items-center gap-1 shrink-0 text-xs tabular-nums text-fg-muted group-hover:text-accent transition-colors">
+                <span>{playlist.trackCount} tracks</span>
+                <SocialIcons name="ArrowUpRight" class="w-3.5 h-3.5" />
+              </span>
             </div>
-          </div>
 
-          <div class="flex items-center gap-3.5 shrink-0 text-xs tabular-nums text-fg-muted">
-            <span class="hidden sm:inline">{playlist.trackCount} tracks</span>
-            <span class="inline-flex items-center gap-1 font-medium text-fg group-hover:text-accent transition-colors">
-              <span>Listen</span>
-              <SocialIcons name="ArrowUpRight" class="w-3.5 h-3.5" />
-            </span>
-          </div>
-        </a>
-      ))}
+            <div class="mt-2 pt-2 border-t border-border ticker-viewport">
+              <div
+                class="ticker-track text-xs text-fg-muted"
+                style={`animation-duration: ${idx === 0 ? 30 : 28}s`}
+              >
+                <span class="shrink-0 pr-2">{tickerFeed}</span>
+                <span class="shrink-0 pr-2" aria-hidden="true">{tickerFeed}</span>
+              </div>
+            </div>
+          </a>
+        );
+      })}
     </div>
   </section>
 
